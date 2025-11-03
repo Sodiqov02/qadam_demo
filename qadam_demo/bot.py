@@ -11,7 +11,7 @@ from telegram.ext import (
     MessageHandler,
     Filters,
     CallbackContext,
-    ConversationHandler
+    ConversationHandler,
 )
 
 # Загружаем переменные окружения
@@ -191,27 +191,27 @@ def handle_cart_choice(update: Update, context: CallbackContext) -> int:
         query.edit_message_text(order_text)
         return PHONE
 
-async def phone_input(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+def phone_input(update: Update, context: CallbackContext) -> int:
     if not update.message or not update.message.text or not update.effective_user:
         return ConversationHandler.END
         
     user_id = update.effective_user.id
     if user_id not in user_orders:
-        await update.message.reply_text("Произошла ошибка. Пожалуйста, начните заказ заново с команды /start")
+        update.message.reply_text("Произошла ошибка. Пожалуйста, начните заказ заново с команды /start")
         return ConversationHandler.END
         
     user_orders[user_id]['phone'] = update.message.text
     
-    await update.message.reply_text("Введите адрес доставки:")
+    update.message.reply_text("Введите адрес доставки:")
     return ADDRESS
 
-async def address_input(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+def address_input(update: Update, context: CallbackContext) -> int:
     if not update.message or not update.message.text or not update.effective_user:
         return ConversationHandler.END
         
     user_id = update.effective_user.id
     if user_id not in user_orders:
-        await update.message.reply_text("Произошла ошибка. Пожалуйста, начните заказ заново с команды /start")
+        update.message.reply_text("Произошла ошибка. Пожалуйста, начните заказ заново с команды /start")
         return ConversationHandler.END
         
     user_orders[user_id]['address'] = update.message.text
@@ -233,23 +233,23 @@ async def address_input(update: Update, context: ContextTypes.DEFAULT_TYPE) -> i
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
     
-    await update.message.reply_text(confirm_text, reply_markup=reply_markup)
+    update.message.reply_text(confirm_text, reply_markup=reply_markup)
     return CONFIRM
 
-async def confirm_order(update: Update, context: ContextTypes.DEFAULT_TYPE) -> int:
+def confirm_order(update: Update, context: CallbackContext) -> int:
     query = get_callback_query(update)
     if not query or not update.effective_user:
         return ConversationHandler.END
         
-    await query.answer()
+    query.answer()
     
     if query.data == "cancel":
-        await query.edit_message_text("Заказ отменен. Используйте /start для нового заказа.")
+        query.edit_message_text("Заказ отменен. Используйте /start для нового заказа.")
         return ConversationHandler.END
     
     user_id = update.effective_user.id
     if user_id not in user_orders:
-        await query.edit_message_text("Произошла ошибка. Пожалуйста, начните заказ заново с команды /start")
+        query.edit_message_text("Произошла ошибка. Пожалуйста, начните заказ заново с команды /start")
         return ConversationHandler.END
         
     order = user_orders[user_id]
@@ -284,7 +284,7 @@ async def confirm_order(update: Update, context: ContextTypes.DEFAULT_TYPE) -> i
     
     try:
         # Отправляем уведомление админу
-        await context.bot.send_message(
+        context.bot.send_message(
             chat_id=ADMIN_ID,
             text=admin_text,
             parse_mode='Markdown',
@@ -292,7 +292,7 @@ async def confirm_order(update: Update, context: ContextTypes.DEFAULT_TYPE) -> i
         )
         
         # Подтверждаем заказ пользователю
-        await query.edit_message_text(
+        query.edit_message_text(
             "✅ Ваш заказ принят!\n\n"
             "Мы свяжемся с вами для подтверждения.\n"
             "Используйте /start для нового заказа."
@@ -303,19 +303,19 @@ async def confirm_order(update: Update, context: ContextTypes.DEFAULT_TYPE) -> i
         return ConversationHandler.END
     except Exception as e:
         print(f"Ошибка при отправке уведомлений: {e}")
-        await query.edit_message_text(
+        query.edit_message_text(
             "Произошла ошибка при оформлении заказа.\n"
             "Пожалуйста, попробуйте позже или свяжитесь с администратором."
         )
         return ConversationHandler.END
         return ConversationHandler.END
 
-async def admin_order_status(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+def admin_order_status(update: Update, context: CallbackContext) -> None:
     query = get_callback_query(update)
     if not query or not update.effective_user:
         return
         
-    await query.answer()
+    query.answer()
     
     if update.effective_user.id != ADMIN_ID:
         return
@@ -336,14 +336,14 @@ async def admin_order_status(update: Update, context: ContextTypes.DEFAULT_TYPE)
             new_status = "🚚 Заказ доставлен"
         
         # Обновляем сообщение админа, убирая кнопки
-        await query.edit_message_text(
+        query.edit_message_text(
             f"{original_text}\n\n{new_status}",
             parse_mode='Markdown'
         )
         
         # Уведомляем пользователя о статусе заказа
         try:
-            await context.bot.send_message(
+            context.bot.send_message(
                 chat_id=int(user_id),
                 text=f"{new_status}!"
             )
