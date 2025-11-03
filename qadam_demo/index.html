@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Qadam — O'zingning savdo tiziming</title>
+  <link rel="icon" href="assets/logo.svg" type="image/svg+xml"/>
+  <link rel="stylesheet" href="style.css" />
+  <meta name="description" content="Qadam — Uzum/Yandex/eMak o'rniga: komissiyasiz, o'z domening, o'z boting, o'z mijozlaring." />
+</head>
+<body>
+  <header class="navbar">
+    <div class="brand">
+      <img src="assets/logo.svg" alt="Qadam logo" class="logo"/>
+      <span>Qadam</span>
+    </div>
+    <nav>
+      <a href="#features">Nega Qadam</a>
+      <a href="#menu">Menyu</a>
+      <a href="#cart">Savatcha</a>
+      <a href="#contact">Aloqa</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <h1>Qadam — <em>Sening biznesing, sening qoidalaring</em></h1>
+    <p class="subtitle">Svoy sayt. Svoy bot. Svoy mijozlar. — Komissiyasiz.</p>
+    <div class="cta">
+      <a href="#menu" class="btn btn-primary">Boshlash</a>
+      <a href="#demo" class="btn btn-ghost">Demontratsiya</a>
+    </div>
+  </section>
+
+  <section id="features" class="features">
+    <div class="feature">
+      <h3>Komissiyasiz</h3>
+      <p>Oraliq platformalarsiz to'g'ridan-to'g'ri savdo. Daromad — seniki.</p>
+    </div>
+    <div class="feature">
+      <h3>To'liq nazorat</h3>
+      <p>O'zingning domen, o'zingning Telegram bot, o'zingning mijoz bazasi.</p>
+    </div>
+    <div class="feature">
+      <h3>Bir marta to'lov</h3>
+      <p>Sistema seniki bo'ladi. Faqat VPS uchun oyiga $3–5.</p>
+    </div>
+  </section>
+
+  <section id="menu" class="menu">
+    <h2>🍔 Menyu</h2>
+    <div class="products-grid">
+      <div class="product-card">
+        <div class="product-image">🍕</div>
+        <h3>Pepperoni</h3>
+        <p class="price">65 000 so'm</p>
+        <button class="add-to-cart" data-name="Pepperoni" data-price="65000">Savatga qo'shish</button>
+      </div>
+      <div class="product-card">
+        <div class="product-image">🍔</div>
+        <h3>Cheeseburger</h3>
+        <p class="price">45 000 so'm</p>
+        <button class="add-to-cart" data-name="Cheeseburger" data-price="45000">Savatga qo'shish</button>
+      </div>
+      <div class="product-card">
+        <div class="product-image">🌯</div>
+        <h3>Shawarma</h3>
+        <p class="price">38 000 so'm</p>
+        <button class="add-to-cart" data-name="Shawarma" data-price="38000">Savatga qo'shish</button>
+      </div>
+      <div class="product-card">
+        <div class="product-image">🥤</div>
+        <h3>Cola 1L</h3>
+        <p class="price">12 000 so'm</p>
+        <button class="add-to-cart" data-name="Cola 1L" data-price="12000">Savatga qo'shish</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="cart" class="cart">
+    <h2>🛒 Savatcha</h2>
+    <ul id="cart-items"></ul>
+    <div class="cart-footer">
+      <div class="total">Umumiy: <span id="cart-total">0</span> so'm</div>
+      <button id="checkout-btn" class="btn btn-primary">Buyurtma berish</button>
+    </div>
+  </section>
+
+  <section id="demo" class="about">
+    <h2>⚙️ Qanday ishlaydi?</h2>
+    <ol>
+      <li>Mijoz landingdan mahsulotlarni tanlaydi va buyurtma beradi.</li>
+      <li>Buyurtma API orqali bevosita bot serveriga yuboriladi.</li>
+      <li>Admin Telegram’da buyurtmani qabul qiladi va boshqaradi.</li>
+    </ol>
+    <p class="note">* Demo rejimida buyurtmalar server logida ko‘rinadi. Telegramga yuborish uchun <code>.env</code> sozlang.</p>
+  </section>
+
+  <section id="contact" class="contact">
+    <h2>Aloqa</h2>
+    <p>Qadam — “qarshi tizim”. Biznesing sening qo'lingda.</p>
+    <a class="btn btn-ghost" href="https://t.me/" target="_blank" rel="noopener">Telegram orqali yozish</a>
+  </section>
+
+  <!-- Order Modal -->
+  <div id="order-modal" class="modal hidden">
+    <div class="modal-content">
+      <button class="modal-close" id="close-modal">×</button>
+      <h3>Ma'lumotlaringiz</h3>
+      <form id="order-form">
+        <label>Ism</label>
+        <input type="text" id="name" required />
+        <label>Telefon</label>
+        <input type="tel" id="phone" placeholder="+998 90 123 45 67" required />
+        <label>Manzil</label>
+        <textarea id="address" rows="2" required></textarea>
+        <label>Izoh (ixtiyoriy)</label>
+        <textarea id="note" rows="2"></textarea>
+        <button type="submit" class="btn btn-primary full">Buyurtmani tasdiqlash</button>
+      </form>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <p>© 2025 Qadam — Svoy sayt. Svoy bot. Svoy mijozlar.</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
