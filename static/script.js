@@ -44,46 +44,77 @@
     return;
   }
 
-  const tenantRequiredError = "Tenant slug required. Open page as /t/<slug>";
+  const menuDataUrl = "./data/menu.json";
+  const demoSuccessMessage =
+    "Demo order accepted. In the real version, this order is sent to Telegram bot and admin panel.";
   const cart = new Map();
 
-  let activeSlug = "";
   let promotions = [];
   let discountPercent = 0;
-  let tenantPlan = "basic";
   let menuCategories = [];
   let activeCategoryId = "all";
   let toastTimer = 0;
-
-  function extractSlug() {
-    const slug = window.location.pathname.split("/")[2] || "";
-    return slug ? decodeURIComponent(slug) : "";
-  }
-
-  function tenantPath(path) {
-    const slug = extractSlug();
-    if (!slug) {
-      throw new Error(tenantRequiredError);
-    }
-    return `/t/${encodeURIComponent(slug)}${path}`;
-  }
 
   function isRenderableImageUrl(value) {
     if (!value || typeof value !== "string") {
       return false;
     }
-    if (value.startsWith("/uploads/")) {
+    if (value.startsWith("./assets/") || value.startsWith("../assets/")) {
       return true;
     }
-    if (value.startsWith("/menu-images/")) {
+    if (value.startsWith("/assets/")) {
       return true;
     }
     try {
-      const parsed = new URL(value);
-      return parsed.protocol === "http:" || parsed.protocol === "https:";
+      const parsed = new URL(value, window.location.href);
+      return parsed.origin === window.location.origin && parsed.pathname.includes("/assets/");
     } catch (_) {
       return false;
     }
+  }
+
+  function categoryId(categoryName) {
+    return String(categoryName || "Menyu")
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "") || "menu";
+  }
+
+  function normalizeMenuItems(data) {
+    if (Array.isArray(data)) {
+      return data;
+    }
+    if (data && Array.isArray(data.items)) {
+      return data.items;
+    }
+    if (data && Array.isArray(data.categories)) {
+      return data.categories.flatMap((category) => {
+        const items = Array.isArray(category.items) ? category.items : [];
+        return items.map((item) => ({
+          ...item,
+          category: item.category || category.title || category.name || "Menyu",
+        }));
+      });
+    }
+    return [];
+  }
+
+  function buildCategories(items) {
+    const categoryMap = new Map();
+    items.forEach((item) => {
+      const title = item.category || "Menyu";
+      const id = categoryId(title);
+      if (!categoryMap.has(id)) {
+        categoryMap.set(id, {
+          id,
+          title,
+          items: [],
+        });
+      }
+      categoryMap.get(id).items.push(item);
+    });
+    return Array.from(categoryMap.values());
   }
 
   function safeText(el, text) {
@@ -300,10 +331,9 @@
     menuEl.appendChild(grid);
   }
 
-  function clearTenantState() {
+  function clearDemoState() {
     promotions = [];
     discountPercent = 0;
-    tenantPlan = "basic";
     menuCategories = [];
     activeCategoryId = "all";
     cart.clear();
@@ -339,14 +369,6 @@
       footerTelegramLink.href = "#";
     }
     renderCart();
-  }
-
-  function enforceSlugChangeReload() {
-    const currentSlug = extractSlug();
-    if (activeSlug && currentSlug && currentSlug !== activeSlug) {
-      clearTenantState();
-      window.location.reload();
-    }
   }
 
   function addToCart(item, triggerButton) {
@@ -611,108 +633,50 @@
     menuEl.appendChild(grid);
   }
 
-  async function loadTenant() {
-    const res = await fetch(tenantPath("/tenant"), { credentials: "same-origin" });
-    if (!res.ok) {
-      throw new Error("Tenant not found");
+  async function loadDemoProfile() {
+    heroTitle.textContent = "Qadam Demo";
+    heroDesc.textContent = "Static demo menu with local cart and checkout preview.";
+    heroMedia.classList.add("hero-fallback");
+    heroMedia.style.backgroundImage = "";
+    if (siteTitle) {
+      siteTitle.textContent = "Qadam Demo";
     }
-    const data = await res.json();
-    tenantPlan = data.plan || "basic";
-    if (data.name) {
-      heroTitle.textContent = data.name;
-      if (siteTitle) {
-        siteTitle.textContent = data.name;
-      }
-      if (footerTitle) {
-        footerTitle.textContent = data.name;
-      }
+    if (footerTitle) {
+      footerTitle.textContent = "Qadam Demo";
     }
-    if (data.description) {
-      heroDesc.textContent = data.description;
-      if (footerDescription) {
-        footerDescription.textContent = data.description;
-      }
-    }
-    if (isRenderableImageUrl(data.hero_image)) {
-      heroMedia.style.backgroundImage = `url("${data.hero_image}")`;
-      heroMedia.classList.remove("hero-fallback");
-    } else {
-      heroMedia.classList.add("hero-fallback");
-      heroMedia.style.backgroundImage = "";
+    if (footerDescription) {
+      footerDescription.textContent = "Static demo menu. Orders are not sent from this version.";
     }
 
     if (ordersLink) {
-      ordersLink.href = `/t/${encodeURIComponent(activeSlug)}/my-orders`;
+      ordersLink.style.display = "none";
     }
     if (adminLink) {
-      adminLink.href = `/t/${encodeURIComponent(activeSlug)}/admin`;
+      adminLink.style.display = "none";
     }
-    if (tenantPlan === "basic") {
-      if (ordersLink) {
-        ordersLink.style.display = "none";
-      }
-      if (adminLink) {
-        adminLink.style.display = "none";
-      }
-    } else {
-      if (ordersLink) {
-        ordersLink.style.display = "";
-      }
-      if (adminLink) {
-        adminLink.style.display = "";
-      }
+    if (headerTelegramLink) {
+      headerTelegramLink.style.display = "none";
     }
-
-    const botUsername = (data.bot_username || "").replace("@", "");
-    if (data.bot_enabled && botUsername) {
-      const link = `https://t.me/${botUsername}`;
-      if (headerTelegramLink) {
-        headerTelegramLink.href = link;
-        headerTelegramLink.textContent = "Telegram";
-        headerTelegramLink.style.display = "";
-      }
-      if (botLink) {
-        botLink.textContent = `@${botUsername}`;
-        botLink.href = link;
-      }
-      if (footerTelegramLink) {
-        footerTelegramLink.textContent = `@${botUsername}`;
-        footerTelegramLink.href = link;
-      }
-      if (botQr) {
-        botQr.src = `https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${encodeURIComponent(link)}`;
-      }
-      if (botMeta) {
-        botMeta.textContent = "Tezkor buyurtma va aloqa uchun Telegram botga o'ting";
-      }
-      if (footerPhone) {
-        footerPhone.textContent = "Aloqa Telegram orqali";
-      }
-    } else {
-      if (headerTelegramLink) {
-        headerTelegramLink.style.display = "none";
-      }
-      if (botLink) {
-        botLink.textContent = "Bot mavjud emas";
-        botLink.removeAttribute("href");
-      }
-      if (footerTelegramLink) {
-        footerTelegramLink.textContent = "Mavjud emas";
-        footerTelegramLink.removeAttribute("href");
-      }
-      if (botQr) {
-        botQr.removeAttribute("src");
-      }
-      if (botMeta) {
-        botMeta.textContent = "Telegram bot ulanmagan";
-      }
-      if (footerPhone) {
-        footerPhone.textContent = "Telefon raqami mavjud emas";
-      }
+    if (botLink) {
+      botLink.textContent = "Demo mode";
+      botLink.removeAttribute("href");
+    }
+    if (footerTelegramLink) {
+      footerTelegramLink.textContent = "Demo mode";
+      footerTelegramLink.removeAttribute("href");
+    }
+    if (botQr) {
+      botQr.removeAttribute("src");
+    }
+    if (botMeta) {
+      botMeta.textContent = "Real version sends orders to Telegram bot and admin panel.";
+    }
+    if (footerPhone) {
+      footerPhone.textContent = "Demo contact";
     }
 
     if (footerAddress) {
-      footerAddress.textContent = "Yetkazib berish manzili buyurtma vaqtida aniqlanadi";
+      footerAddress.textContent = "Demo address";
     }
     if (footerHours) {
       footerHours.textContent = "Har kuni 10:00 - 22:00";
@@ -720,32 +684,18 @@
   }
 
   async function loadPromotions() {
-    if (tenantPlan === "basic") {
-      promotions = [];
-      discountPercent = 0;
-      return;
-    }
-    const res = await fetch(tenantPath("/api/promotions"), { credentials: "same-origin" });
-    if (!res.ok) {
-      promotions = [];
-      discountPercent = 0;
-      return;
-    }
-    const data = await res.json();
-    promotions = data.items || [];
-    discountPercent = promotions
-      .filter((p) => p.type === "happy_hours" && p.discount_percent)
-      .reduce((acc, p) => Math.max(acc, p.discount_percent), 0);
+    promotions = [];
+    discountPercent = 0;
   }
 
   async function loadMenu() {
     renderMenuSkeleton(9);
-    const res = await fetch(tenantPath("/menu"), { credentials: "same-origin" });
+    const res = await fetch(menuDataUrl, { cache: "no-store" });
     if (!res.ok) {
       throw new Error("Menu yuklab bo'lmadi");
     }
     const data = await res.json();
-    menuCategories = data.categories || [];
+    menuCategories = buildCategories(normalizeMenuItems(data));
     if (activeCategoryId !== "all" && !menuCategories.some((cat) => String(cat.id) === activeCategoryId)) {
       activeCategoryId = "all";
     }
@@ -763,7 +713,7 @@
     setSubmitState(true);
     try {
       const form = new FormData(orderForm);
-      const payload = {
+      const demoOrder = {
         items: Array.from(cart.values()).map(({ item, qty }) => ({ item_id: item.id, qty })),
         customer: {
           name: (form.get("name") || "").trim(),
@@ -773,19 +723,11 @@
         },
         source: "site",
       };
-      const res = await fetch(tenantPath("/orders"), {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-        credentials: "same-origin",
-      });
-      if (!res.ok) {
-        throw new Error("Yuborishda xatolik");
-      }
-      const data = await res.json();
-      setStatus(`Buyurtma qabul qilindi: #${data.order_id}`, "is-success");
-      showCartToast("Buyurtmangiz muvaffaqiyatli yuborildi");
-      setCartOpen(false);
+      window.setTimeout(function () {
+        console.info("Qadam demo order", demoOrder);
+      }, 0);
+      setStatus(demoSuccessMessage, "is-success");
+      showCartToast("Demo order accepted");
       clearCart();
       orderForm.reset();
     } catch (err) {
@@ -796,16 +738,10 @@
   }
 
   async function boot() {
-    clearTenantState();
-    activeSlug = extractSlug();
-    if (!activeSlug) {
-      setStatus(tenantRequiredError, "is-error");
-      menuEl.innerHTML = `<p class="muted">${tenantRequiredError}</p>`;
-      return;
-    }
+    clearDemoState();
     renderMenuSkeleton(9);
     try {
-      await loadTenant();
+      await loadDemoProfile();
       await loadPromotions();
       await loadMenu();
     } catch (err) {
@@ -859,9 +795,6 @@
       setCartOpen(false);
     }
   });
-
-  window.addEventListener("popstate", enforceSlugChangeReload);
-  window.setInterval(enforceSlugChangeReload, 1000);
 
   if (cartPane) {
     cartPane.setAttribute("inert", "");
