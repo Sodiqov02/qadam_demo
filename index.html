@@ -12,7 +12,7 @@
     <header class="site-header">
       <div class="brand-block">
         <p class="eyebrow" data-i18n="brandEyebrow">Qadam storefront</p>
-        <h1 id="site-title">Qadam menyusi</h1>
+        <h1 id="site-title">Qadam Demo</h1>
       </div>
       <div class="site-actions">
         <div class="lang-switch" aria-label="Language">
@@ -36,34 +36,34 @@
         <div class="hero-overlay"></div>
         <div class="hero-layout">
           <div class="hero-content">
-            <p class="hero-eyebrow" data-i18n="heroEyebrow">Restoran vitrinasi</p>
-            <h2 id="hero-title" data-i18n="heroTitle">Qadam</h2>
-            <p id="hero-desc" class="hero-desc" data-i18n="heroDesc">Mazali taomlar va tez yetkazib berish.</p>
+            <p class="hero-eyebrow" data-i18n="heroEyebrow">RESTORAN VITRINASI</p>
+            <h2 id="hero-title" data-i18n="heroTitle">Qadam Demo</h2>
+            <p id="hero-desc" class="hero-desc" data-i18n="heroDesc">A refined online ordering experience for restaurants — crafted for direct orders, multilingual guests and smooth checkout.</p>
             <div class="hero-actions">
-              <button class="ghost-btn hero-btn" id="hero-cta" type="button" data-i18n="viewMenu">Menyuni ko'rish</button>
+              <button class="ghost-btn hero-btn" id="hero-cta" type="button" data-i18n="viewMenu">Tanlangan menyuni ko‘rish</button>
               <button class="ghost-btn hero-secondary cart-trigger" type="button" data-i18n="openCart">Savatni ochish</button>
             </div>
             <div class="hero-highlights">
-              <span class="hero-chip" data-i18n="highlightFast">Tez buyurtma</span>
-              <span class="hero-chip" data-i18n="highlightFresh">Yangi pishiriladi</span>
-              <span class="hero-chip" data-i18n="highlightDelivery">Yetkazib berish mavjud</span>
+              <span class="hero-chip" data-i18n="highlightFast">Direct orders</span>
+              <span class="hero-chip" data-i18n="highlightFresh">Multilingual</span>
+              <span class="hero-chip" data-i18n="highlightDelivery">Telegram-ready</span>
             </div>
           </div>
           <aside class="hero-aside">
             <div class="promo-plate">
-              <p class="pill" data-i18n="promoPill">Issiq &amp; mazali</p>
-              <h3 data-i18n="promoTitle">Buyurtma bir necha qadamda</h3>
-              <p class="promo-copy" data-i18n="promoCopy">
-                Menyudan tanlang, savatni to'ldiring va buyurtmani shu sahifada yakunlang.
-              </p>
+              <p class="pill" data-i18n="promoPill">Live order flow</p>
+              <h3 data-i18n="promoTitle">New order</h3>
+              <p class="promo-copy" data-i18n="promoCopy">A compact preview of the handoff from storefront to operations.</p>
               <div class="promo-qr">
-                <div class="qr-placeholder">
-                  <img id="bot-qr" alt="Telegram QR" />
-                </div>
-                <div class="promo-meta">
-                  <span data-i18n="telegramVia">Telegram orqali</span>
-                  <a id="bot-link" href="#" target="_blank" rel="noopener">@bot</a>
-                  <small id="bot-meta" data-i18n="botMeta">Bot mavjud bo'lsa tezkor buyurtma uchun foydalaning</small>
+                <div class="order-preview">
+                  <div class="order-preview-head">
+                    <span class="order-preview-status"></span>
+                    <span data-i18n="orderPreviewTitle">Yangi buyurtma</span>
+                  </div>
+                  <div class="order-preview-row">Classic Burger × 1</div>
+                  <div class="order-preview-row">Caesar Salad × 1</div>
+                  <strong class="order-preview-total" data-i18n="orderPreviewTotal">Jami: 74 000 so'm</strong>
+                  <em class="order-preview-foot" data-i18n="orderPreviewFoot">Telegram botga yuboriladi</em>
                 </div>
               </div>
             </div>
@@ -71,13 +71,29 @@
         </div>
       </section>
 
+      <section class="trust-strip" aria-label="Qadam Demo value">
+        <article class="trust-card">
+          <h3 data-i18n="trustDirectTitle">To‘g‘ridan-to‘g‘ri buyurtma</h3>
+          <p data-i18n="trustDirectText">Mijozlar buyurtmani restoran sahifasidan ortiqcha vositachilarsiz beradi.</p>
+        </article>
+        <article class="trust-card">
+          <h3 data-i18n="trustLangTitle">E’tibor bilan tayyorlangan oqim</h3>
+          <p data-i18n="trustLangText">Taom tanlashdan buyurtmani yakunlashgacha bo‘lgan jarayon toza va ishonchli ko‘rinadi.</p>
+        </article>
+        <article class="trust-card">
+          <h3 data-i18n="trustAdminTitle">Ish jarayoniga tayyor</h3>
+          <p data-i18n="trustAdminText">Buyurtmalarni Telegram bot va admin panelga uzatish oqimi uchun tayyorlangan.</p>
+        </article>
+      </section>
+
       <section class="menu-discovery">
         <div class="menu-toolbar">
           <div>
             <p class="eyebrow" data-i18n="menuEyebrow">Bugungi tanlov</p>
-            <h2 data-i18n="menuTitle">Menyu</h2>
+            <h2 data-i18n="menuTitle">Tanlangan menyu</h2>
+            <p class="menu-toolbar-subtitle" data-i18n="menuDescription">Restoran taomlari tezkor online buyurtma uchun tayyorlangan.</p>
           </div>
-          <p class="menu-toolbar-copy" data-i18n="menuCopy">Kategoriya bo'yicha tanlang va mahsulotlarni tez qo'shing.</p>
+          <p class="menu-toolbar-copy" data-i18n="menuCopy">Kategoriyani tanlang va yoqqan taomlarni savatga qo‘shing.</p>
         </div>
         <div id="menu-filters" class="menu-filters"></div>
       </section>
@@ -86,22 +102,22 @@
 
     <footer class="site-footer">
       <div class="footer-brand">
-        <p class="eyebrow" data-i18n="footerEyebrow">Buyurtma va aloqa</p>
-        <h2 id="footer-title">Qadam</h2>
-        <p id="footer-description" class="footer-copy" data-i18n="footerDescription">Menyu, buyurtma va yetkazib berish bitta sahifada.</p>
+        <p class="eyebrow" data-i18n="footerEyebrow">Buyurtmalar va kontaktlar</p>
+        <h2 id="footer-title">Qadam Demo</h2>
+        <p id="footer-description" class="footer-copy" data-i18n="footerDescription">Restoran uchun statik demo vitrina. Production versiyada buyurtmalar Telegram bot va admin panelga yuborilishi mumkin.</p>
       </div>
       <div class="footer-grid">
         <div class="footer-card">
-          <span class="footer-label">Telegram / bot</span>
-          <a id="footer-telegram-link" href="#" target="_blank" rel="noopener" data-i18n="unavailable">Mavjud emas</a>
+          <span class="footer-label">Telegram / Bot</span>
+          <a id="footer-telegram-link" href="#" target="_blank" rel="noopener" data-i18n="footerTelegramFlow">Demo buyurtma oqimi</a>
         </div>
         <div class="footer-card">
           <span class="footer-label" data-i18n="phone">Telefon</span>
-          <span id="footer-phone" data-i18n="footerPhone">Telefon raqami mavjud emas</span>
+          <span id="footer-phone" data-i18n="footerPhone">Demo kontakt</span>
         </div>
         <div class="footer-card">
           <span class="footer-label" data-i18n="address">Manzil</span>
-          <span id="footer-address" data-i18n="footerAddress">Yetkazib berish manzili buyurtma vaqtida aniqlanadi</span>
+          <span id="footer-address" data-i18n="footerAddress">Demo restoran manzili</span>
         </div>
         <div class="footer-card">
           <span class="footer-label" data-i18n="hours">Ish vaqti</span>
@@ -151,9 +167,12 @@
             <label data-i18n="address">Manzil</label>
             <textarea name="address" autocomplete="street-address" required data-i18n-placeholder="addressPlaceholder"></textarea>
           </div>
-          <div class="field">
-            <label data-i18n="comment">Izoh (ixtiyoriy)</label>
-            <textarea name="comment" placeholder="-" data-i18n-placeholder="commentPlaceholder"></textarea>
+          <div class="note-group">
+            <button class="note-toggle" id="note-toggle" type="button" aria-expanded="false" aria-controls="order-note-field" data-i18n="addNote">+ Izoh qo‘shish</button>
+            <div class="field order-note-field" id="order-note-field">
+              <label data-i18n="comment">Izoh (ixtiyoriy)</label>
+              <textarea name="comment" data-i18n-placeholder="commentPlaceholder"></textarea>
+            </div>
           </div>
           <button type="submit" id="submit-order" data-i18n="submitOrder">Yuborish</button>
           <p id="order-status" class="muted status"></p>
