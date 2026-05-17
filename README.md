@@ -17,4 +17,3 @@ Serve the repository root. The page loads local assets with relative paths:
 - `./static/script.js`
 - `./data/menu.json`
 - `./assets/menu/...`
-
