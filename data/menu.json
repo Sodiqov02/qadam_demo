@@ -5,7 +5,7 @@
     "description": "Mol go'shti kotleti, cheddar pishlog'i, yangi sabzavot va maxsus sous.",
     "price": 39000,
     "category": "Burgerlar",
-    "image": "./assets/menu/classik burger.jpg"
+    "image": "./assets/menu/classic-burger.jpg"
   },
   {
     "id": "cheese-burger",
@@ -13,7 +13,7 @@
     "description": "Ikki qavat cheddar, yumshoq bulochka, tuzlangan bodring va burger sousi.",
     "price": 43000,
     "category": "Burgerlar",
-    "image": "./assets/menu/cheese burger.jpg"
+    "image": "./assets/menu/cheese-burger.jpg"
   },
   {
     "id": "lavash-chicken",
@@ -21,7 +21,7 @@
     "description": "Tovuq filesi, sabzavotlar, fri kartoshka va oq sous bilan o'ralgan lavash.",
     "price": 33000,
     "category": "Lavash",
-    "image": "./assets/menu/chiken lavash.jpg"
+    "image": "./assets/menu/chicken-lavash.jpg"
   },
   {
     "id": "beef-lavash",
@@ -29,7 +29,7 @@
     "description": "Mol go'shti, yangi ko'katlar, pomidor va achchiq sousli katta lavash.",
     "price": 37000,
     "category": "Lavash",
-    "image": "./assets/menu/beef lavash.jpg"
+    "image": "./assets/menu/beef-lavash.jpg"
   },
   {
     "id": "pepperoni-pizza",
@@ -37,7 +37,7 @@
     "description": "Mozzarella, pepperoni kolbasasi va pomidor sousli issiq pizza.",
     "price": 69000,
     "category": "Pizza",
-    "image": "./assets/menu/peperoni pizza.jpg"
+    "image": "./assets/menu/pepperoni-pizza.jpg"
   },
   {
     "id": "margherita-pizza",
@@ -45,7 +45,7 @@
     "description": "Mozzarella, pomidor, rayhon va zaytun moyi bilan klassik pizza.",
     "price": 59000,
     "category": "Pizza",
-    "image": "./assets/menu/Margherita Pizza.jpg"
+    "image": "./assets/menu/margherita-pizza.jpg"
   },
   {
     "id": "caesar-salad",
@@ -53,7 +53,7 @@
     "description": "Tovuq filesi, romaine salati, parmesan, kruton va caesar sousi.",
     "price": 35000,
     "category": "Salatlar",
-    "image": "./assets/menu/Caesar Salad.jpg"
+    "image": "./assets/menu/caesar-salad.jpg"
   },
   {
     "id": "fries",
@@ -61,14 +61,14 @@
     "description": "Qarsildoq fri kartoshka, ketchup va maxsus ziravorlar bilan.",
     "price": 18000,
     "category": "Snacklar",
-    "image": "./assets/menu/Fri Kartoshka.jpg"
+    "image": "./assets/menu/fries.jpg"
   },
   {
     "id": "cola",
-    "name": "Cola",
-    "description": "Muzdek gazlangan ichimlik, 0.5 l.",
+    "name": "Firma kolasi",
+    "description": "Sovutilgan firma kola ichimligi.",
     "price": 10000,
     "category": "Ichimliklar",
-    "image": "./assets/menu/cola 0.5.png"
+    "image": "./assets/menu/signature-cola.jpg"
   }
 ]

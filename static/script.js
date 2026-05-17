@@ -20,6 +20,8 @@
   const orderForm = document.getElementById("order-form");
   const submitBtn = document.getElementById("submit-order");
   const statusEl = document.getElementById("order-status");
+  const noteToggle = document.getElementById("note-toggle");
+  const orderNoteField = document.getElementById("order-note-field");
   const heroTitle = document.getElementById("hero-title");
   const heroDesc = document.getElementById("hero-desc");
   const heroMedia = document.getElementById("hero-media");
@@ -52,29 +54,40 @@
       ordersLink: "Buyurtmalarim",
       adminLink: "Boshqaruv",
       cart: "Savat",
-      heroEyebrow: "Restoran vitrinasi",
+      heroEyebrow: "RESTORAN VITRINASI",
       heroTitle: "Qadam Demo",
-      heroDesc: "Mahalliy savat va buyurtma ko'rinishi bilan statik demo menyu.",
-      viewMenu: "Menyuni ko'rish",
+      heroDesc: "Restoranlar uchun to‘g‘ridan-to‘g‘ri buyurtmalar, ko‘p tilli mehmonlar va qulay checkout uchun yaratilgan nafis online buyurtma tajribasi.",
+      viewMenu: "Tanlangan menyuni ko‘rish",
       openCart: "Savatni ochish",
-      highlightFast: "Tez buyurtma",
-      highlightFresh: "Yangi pishiriladi",
-      highlightDelivery: "Yetkazib berish mavjud",
-      promoPill: "Issiq & mazali",
-      promoTitle: "Buyurtma bir necha qadamda",
-      promoCopy: "Menyudan tanlang, savatni to'ldiring va buyurtmani shu sahifada yakunlang.",
+      highlightFast: "To‘g‘ridan-to‘g‘ri buyurtma",
+      highlightFresh: "Ko‘p tilli",
+      highlightDelivery: "Telegramga tayyor",
+      promoPill: "Jonli buyurtma oqimi",
+      promoTitle: "Yangi buyurtma",
+      promoCopy: "Vitrinadan ish jarayoniga uzatiladigan buyurtmaning ixcham ko‘rinishi.",
+      orderPreviewTitle: "Yangi buyurtma",
+      orderPreviewTotal: "Jami: 74 000 so'm",
+      orderPreviewFoot: "Telegram botga yuboriladi",
       telegramVia: "Telegram orqali",
       botMeta: "Haqiqiy versiyada buyurtmalar Telegram bot va admin panelga yuboriladi.",
+      trustDirectTitle: "To‘g‘ridan-to‘g‘ri buyurtma",
+      trustDirectText: "Mijozlar buyurtmani restoran vitrinasi orqali ortiqcha vositachilarsiz beradi.",
+      trustLangTitle: "E’tibor bilan tayyorlangan oqim",
+      trustLangText: "Taom tanlashdan buyurtmani yakunlashgacha bo‘lgan jarayon toza va ishonchli ko‘rinadi.",
+      trustAdminTitle: "Ish jarayoniga tayyor",
+      trustAdminText: "Buyurtmalarni Telegram bot va admin panelga uzatish oqimi uchun tayyorlangan.",
       menuEyebrow: "Bugungi tanlov",
-      menuTitle: "Menyu",
-      menuCopy: "Kategoriya bo'yicha tanlang va mahsulotlarni tez qo'shing.",
-      footerEyebrow: "Buyurtma va aloqa",
-      footerDescription: "Statik demo menyu. Bu versiyadan buyurtmalar yuborilmaydi.",
+      menuTitle: "Tanlangan menyu",
+      menuDescription: "Restoran taomlari tezkor online buyurtma uchun tayyorlangan.",
+      menuCopy: "Kategoriyani tanlang va yoqqan taomlarni buyurtmaga qo‘shing.",
+      footerEyebrow: "Buyurtmalar va kontaktlar",
+      footerDescription: "Restoran uchun statik demo vitrina. Production versiyada buyurtmalar Telegram bot va admin panelga yuborilishi mumkin.",
       unavailable: "Mavjud emas",
+      footerTelegramFlow: "Demo buyurtma oqimi",
       phone: "Telefon",
-      footerPhone: "Demo aloqa",
+      footerPhone: "Demo kontakt",
       address: "Manzil",
-      footerAddress: "Demo manzil",
+      footerAddress: "Demo restoran manzili",
       hours: "Ish vaqti",
       footerHours: "Har kuni 10:00 - 22:00",
       cartSubtitle: "Buyurtmani shu yerda yakunlang",
@@ -88,10 +101,11 @@
       phonePlaceholder: "+998",
       addressPlaceholder: "Yetkazib berish manzili",
       comment: "Izoh (ixtiyoriy)",
-      commentPlaceholder: "-",
+      commentPlaceholder: "Masalan: soussiz, achchiq emas, yetkazish vaqti...",
+      addNote: "+ Izoh qo‘shish",
       submitOrder: "Yuborish",
       sending: "Yuborilmoqda...",
-      add: "Qo'shish",
+      add: "Buyurtmaga qo‘shish",
       added: "Qo'shildi",
       addedToCart: "{name} savatga qo'shildi",
       piece: "dona",
@@ -153,8 +167,8 @@
           description: "Qarsildoq fri kartoshka, ketchup va maxsus ziravorlar bilan.",
         },
         cola: {
-          name: "Cola",
-          description: "Muzdek gazlangan ichimlik, 0.5 l.",
+          name: "Firma kolasi",
+          description: "Sovutilgan firma kola ichimligi.",
         },
       },
     },
@@ -163,29 +177,40 @@
       ordersLink: "Мои заказы",
       adminLink: "Управление",
       cart: "Корзина",
-      heroEyebrow: "Витрина ресторана",
+      heroEyebrow: "ВИТРИНА РЕСТОРАНА",
       heroTitle: "Qadam Demo",
-      heroDesc: "Статичное демо-меню с локальной корзиной и оформлением заказа.",
-      viewMenu: "Смотреть меню",
+      heroDesc: "Изысканный онлайн-заказ для ресторанов — для прямых заказов, гостей на разных языках и плавного оформления.",
+      viewMenu: "Смотреть авторское меню",
       openCart: "Открыть корзину",
-      highlightFast: "Быстрый заказ",
-      highlightFresh: "Готовим свежим",
-      highlightDelivery: "Есть доставка",
-      promoPill: "Горячо и вкусно",
-      promoTitle: "Заказ в несколько шагов",
-      promoCopy: "Выберите блюда, наполните корзину и завершите заказ на этой странице.",
+      highlightFast: "Прямые заказы",
+      highlightFresh: "Мультиязычно",
+      highlightDelivery: "Telegram-ready",
+      promoPill: "Живой поток заказа",
+      promoTitle: "Новый заказ",
+      promoCopy: "Компактный предпросмотр передачи заказа от витрины к операциям.",
+      orderPreviewTitle: "Новый заказ",
+      orderPreviewTotal: "Итого: 74 000 so'm",
+      orderPreviewFoot: "Отправка в Telegram-бот",
       telegramVia: "Через Telegram",
       botMeta: "В реальной версии заказы отправляются в Telegram-бот и админ-панель.",
+      trustDirectTitle: "Прямые заказы",
+      trustDirectText: "Гости оформляют заказ на фирменной странице ресторана без лишних посредников.",
+      trustLangTitle: "С заботой о подаче",
+      trustLangText: "Путь от выбора блюда до оформления заказа выглядит чисто, понятно и надёжно.",
+      trustAdminTitle: "Готово к работе",
+      trustAdminText: "Логика рассчитана на передачу заказов в Telegram-бот и админ-панель.",
       menuEyebrow: "Сегодняшний выбор",
-      menuTitle: "Меню",
-      menuCopy: "Выбирайте по категориям и быстро добавляйте позиции.",
+      menuTitle: "Авторское меню",
+      menuDescription: "Блюда ресторана, оформленные для быстрого онлайн-заказа.",
+      menuCopy: "Выберите категорию и добавьте любимые позиции к заказу.",
       footerEyebrow: "Заказы и контакты",
-      footerDescription: "Статичное демо-меню. Заказы из этой версии не отправляются.",
+      footerDescription: "Статическая демо-витрина ресторана. В production-версии заказы могут отправляться в Telegram-бот и админ-панель.",
       unavailable: "Недоступно",
+      footerTelegramFlow: "Демо-поток заказов",
       phone: "Телефон",
       footerPhone: "Демо-контакт",
       address: "Адрес",
-      footerAddress: "Демо-адрес",
+      footerAddress: "Демо-адрес ресторана",
       hours: "Время работы",
       footerHours: "Каждый день 10:00 - 22:00",
       cartSubtitle: "Завершите заказ здесь",
@@ -199,10 +224,11 @@
       phonePlaceholder: "+998",
       addressPlaceholder: "Адрес доставки",
       comment: "Комментарий (необязательно)",
-      commentPlaceholder: "-",
+      commentPlaceholder: "Например: без соуса, не остро, удобное время доставки...",
+      addNote: "+ Добавить комментарий",
       submitOrder: "Отправить",
       sending: "Отправляется...",
-      add: "Добавить",
+      add: "Добавить к заказу",
       added: "Добавлено",
       addedToCart: "{name} добавлен в корзину",
       piece: "шт.",
@@ -264,8 +290,8 @@
           description: "Хрустящий картофель фри с кетчупом и фирменными специями.",
         },
         cola: {
-          name: "Кола",
-          description: "Охлажденный газированный напиток, 0.5 л.",
+          name: "Фирменная кола",
+          description: "Охлаждённый фирменный напиток в стиле колы.",
         },
       },
     },
@@ -274,29 +300,40 @@
       ordersLink: "My orders",
       adminLink: "Admin",
       cart: "Cart",
-      heroEyebrow: "Restaurant storefront",
+      heroEyebrow: "RESTAURANT STOREFRONT",
       heroTitle: "Qadam Demo",
-      heroDesc: "Static demo menu with local cart and checkout preview.",
-      viewMenu: "View menu",
+      heroDesc: "A refined online ordering experience for restaurants — crafted for direct orders, multilingual guests and smooth checkout.",
+      viewMenu: "View signature menu",
       openCart: "Open cart",
-      highlightFast: "Fast order",
-      highlightFresh: "Freshly prepared",
-      highlightDelivery: "Delivery available",
-      promoPill: "Hot & tasty",
-      promoTitle: "Order in a few steps",
-      promoCopy: "Choose from the menu, fill your cart, and finish the order on this page.",
+      highlightFast: "Direct orders",
+      highlightFresh: "Multilingual",
+      highlightDelivery: "Telegram-ready",
+      promoPill: "Live order flow",
+      promoTitle: "New order",
+      promoCopy: "A compact preview of the handoff from storefront to operations.",
+      orderPreviewTitle: "New order",
+      orderPreviewTotal: "Total: 74 000 so'm",
+      orderPreviewFoot: "Sent to Telegram bot",
       telegramVia: "Via Telegram",
       botMeta: "The real version sends orders to a Telegram bot and admin panel.",
-      menuEyebrow: "Today's picks",
-      menuTitle: "Menu",
-      menuCopy: "Choose by category and quickly add items.",
+      trustDirectTitle: "Direct orders",
+      trustDirectText: "Guests order from your own branded storefront, without marketplace distractions.",
+      trustLangTitle: "Prepared with care",
+      trustLangText: "The flow is designed to make every dish feel selected, confirmed and handled properly.",
+      trustAdminTitle: "Ready for operations",
+      trustAdminText: "Built around a Telegram/admin-ready handoff for real restaurant workflows.",
+      menuEyebrow: "Today’s selection",
+      menuTitle: "Signature menu",
+      menuDescription: "Curated dishes prepared for direct online ordering.",
+      menuCopy: "Choose by category and add your favorites to the order.",
       footerEyebrow: "Orders and contacts",
-      footerDescription: "Static demo menu. Orders are not sent from this version.",
+      footerDescription: "Static restaurant storefront demo. In production, orders can be sent to a Telegram bot and admin panel.",
       unavailable: "Unavailable",
+      footerTelegramFlow: "Demo order flow",
       phone: "Phone",
       footerPhone: "Demo contact",
       address: "Address",
-      footerAddress: "Demo address",
+      footerAddress: "Demo restaurant address",
       hours: "Hours",
       footerHours: "Every day 10:00 - 22:00",
       cartSubtitle: "Finish your order here",
@@ -310,10 +347,11 @@
       phonePlaceholder: "+998",
       addressPlaceholder: "Delivery address",
       comment: "Note (optional)",
-      commentPlaceholder: "-",
+      commentPlaceholder: "Example: no sauce, not spicy, preferred delivery time...",
+      addNote: "+ Add a note",
       submitOrder: "Send order",
       sending: "Sending...",
-      add: "Add",
+      add: "Add to order",
       added: "Added",
       addedToCart: "{name} added to cart",
       piece: "pc",
@@ -375,8 +413,8 @@
           description: "Crispy fries with ketchup and signature spices.",
         },
         cola: {
-          name: "Cola",
-          description: "Chilled carbonated drink, 0.5 l.",
+          name: "Signature Cola",
+          description: "House cola-style drink, chilled and served fresh.",
         },
       },
     },
@@ -547,6 +585,15 @@
     }
   }
 
+  function setNoteOpen(isOpen) {
+    if (!noteToggle || !orderNoteField) {
+      return;
+    }
+    const open = Boolean(isOpen);
+    orderNoteField.classList.toggle("is-open", open);
+    noteToggle.setAttribute("aria-expanded", open ? "true" : "false");
+  }
+
   function updateScrollFab() {
     if (!scrollToFormFab || !cartScroll || !cartForm) {
       return;
@@ -590,11 +637,11 @@
 
   function scrollActiveCategoryIntoView() {
     const active = document.querySelector(".menu-filter-pill.is-active");
-    if (active) {
-      active.scrollIntoView({
+    if (active && menuFilters) {
+      const left = active.offsetLeft - (menuFilters.clientWidth - active.clientWidth) / 2;
+      menuFilters.scrollTo({
+        left: Math.max(0, left),
         behavior: "smooth",
-        inline: "center",
-        block: "nearest",
       });
     }
   }
@@ -732,6 +779,7 @@
     if (orderForm) {
       orderForm.reset();
     }
+    setNoteOpen(false);
     if (siteTitle) {
       siteTitle.textContent = t("menuTitle");
     }
@@ -1051,8 +1099,8 @@
       botLink.removeAttribute("href");
     }
     if (footerTelegramLink) {
-      footerTelegramLink.dataset.i18n = "demoMode";
-      footerTelegramLink.textContent = t("demoMode");
+      footerTelegramLink.dataset.i18n = "footerTelegramFlow";
+      footerTelegramLink.textContent = t("footerTelegramFlow");
       footerTelegramLink.removeAttribute("href");
     }
     if (botQr) {
@@ -1120,6 +1168,7 @@
       showCartToast(t("toastSuccess"));
       clearCart();
       orderForm.reset();
+      setNoteOpen(false);
     } catch (err) {
       setStatus((err && err.message) || t("error"), "is-error");
     } finally {
@@ -1175,6 +1224,11 @@
         behavior: "smooth",
         block: "center",
       });
+    });
+  }
+  if (noteToggle) {
+    noteToggle.addEventListener("click", function () {
+      setNoteOpen(noteToggle.getAttribute("aria-expanded") !== "true");
     });
   }
   if (cartScroll) {
