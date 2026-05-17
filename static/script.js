@@ -38,6 +38,7 @@
   const footerAddress = document.getElementById("footer-address");
   const footerHours = document.getElementById("footer-hours");
   const cartTriggers = document.querySelectorAll(".cart-trigger");
+  const langButtons = document.querySelectorAll("[data-lang]");
   let lastCartTrigger = null;
 
   if (!menuEl || !orderForm || !statusEl) {
@@ -45,8 +46,341 @@
   }
 
   const menuDataUrl = "./data/menu.json";
-  const demoSuccessMessage =
-    "Demo order accepted. In the real version, this order is sent to Telegram bot and admin panel.";
+  const translations = {
+    uz: {
+      brandEyebrow: "Qadam storefront",
+      ordersLink: "Buyurtmalarim",
+      adminLink: "Boshqaruv",
+      cart: "Savat",
+      heroEyebrow: "Restoran vitrinasi",
+      heroTitle: "Qadam Demo",
+      heroDesc: "Mahalliy savat va buyurtma ko'rinishi bilan statik demo menyu.",
+      viewMenu: "Menyuni ko'rish",
+      openCart: "Savatni ochish",
+      highlightFast: "Tez buyurtma",
+      highlightFresh: "Yangi pishiriladi",
+      highlightDelivery: "Yetkazib berish mavjud",
+      promoPill: "Issiq & mazali",
+      promoTitle: "Buyurtma bir necha qadamda",
+      promoCopy: "Menyudan tanlang, savatni to'ldiring va buyurtmani shu sahifada yakunlang.",
+      telegramVia: "Telegram orqali",
+      botMeta: "Haqiqiy versiyada buyurtmalar Telegram bot va admin panelga yuboriladi.",
+      menuEyebrow: "Bugungi tanlov",
+      menuTitle: "Menyu",
+      menuCopy: "Kategoriya bo'yicha tanlang va mahsulotlarni tez qo'shing.",
+      footerEyebrow: "Buyurtma va aloqa",
+      footerDescription: "Statik demo menyu. Bu versiyadan buyurtmalar yuborilmaydi.",
+      unavailable: "Mavjud emas",
+      phone: "Telefon",
+      footerPhone: "Demo aloqa",
+      address: "Manzil",
+      footerAddress: "Demo manzil",
+      hours: "Ish vaqti",
+      footerHours: "Har kuni 10:00 - 22:00",
+      cartSubtitle: "Buyurtmani shu yerda yakunlang",
+      itemCount: "{count} ta mahsulot",
+      clearCart: "Tozalash",
+      close: "Yopish",
+      emptyCart: "Savat hozircha bo'sh. Yoqtirgan taomingizni qo'shing.",
+      total: "Umumiy summa",
+      name: "Ism",
+      namePlaceholder: "Ismingiz",
+      phonePlaceholder: "+998",
+      addressPlaceholder: "Yetkazib berish manzili",
+      comment: "Izoh (ixtiyoriy)",
+      commentPlaceholder: "-",
+      submitOrder: "Yuborish",
+      sending: "Yuborilmoqda...",
+      add: "Qo'shish",
+      added: "Qo'shildi",
+      addedToCart: "{name} savatga qo'shildi",
+      piece: "dona",
+      decreaseQty: "{name} sonini kamaytirish",
+      increaseQty: "{name} sonini oshirish",
+      removeItem: "{name} ni olib tashlash",
+      all: "Barcha",
+      emptyCategory: "Bu bo'limda hozircha taom yo'q.",
+      naturalBadge: "100% tabiy",
+      recommendationBadge: "Kun tavsiyasi",
+      discountBadge: "Aksiya -{percent}%",
+      oldPrice: "Avval: {price}",
+      emptyCartStatus: "Savat bo'sh. Avval menyudan qo'shing.",
+      successStatus: "Demo buyurtma qabul qilindi. Haqiqiy versiyada buyurtma Telegram bot va admin panelga yuboriladi.",
+      toastSuccess: "Demo buyurtma qabul qilindi",
+      menuLoadError: "Menu yuklab bo'lmadi",
+      error: "Xatolik",
+      demoMode: "Demo rejim",
+      categories: {
+        "Burgerlar": "Burgerlar",
+        "Lavash": "Lavash",
+        "Pizza": "Pizza",
+        "Salatlar": "Salatlar",
+        "Snacklar": "Snacklar",
+        "Ichimliklar": "Ichimliklar",
+        "Menyu": "Menyu",
+      },
+      items: {
+        "burger-classic": {
+          name: "Classic Burger",
+          description: "Mol go'shti kotleti, cheddar pishlog'i, yangi sabzavot va maxsus sous.",
+        },
+        "cheese-burger": {
+          name: "Cheese Burger",
+          description: "Ikki qavat cheddar, yumshoq bulochka, tuzlangan bodring va burger sousi.",
+        },
+        "lavash-chicken": {
+          name: "Chicken Lavash",
+          description: "Tovuq filesi, sabzavotlar, fri kartoshka va oq sous bilan o'ralgan lavash.",
+        },
+        "beef-lavash": {
+          name: "Beef Lavash",
+          description: "Mol go'shti, yangi ko'katlar, pomidor va achchiq sousli katta lavash.",
+        },
+        "pepperoni-pizza": {
+          name: "Pepperoni Pizza",
+          description: "Mozzarella, pepperoni kolbasasi va pomidor sousli issiq pizza.",
+        },
+        "margherita-pizza": {
+          name: "Margherita Pizza",
+          description: "Mozzarella, pomidor, rayhon va zaytun moyi bilan klassik pizza.",
+        },
+        "caesar-salad": {
+          name: "Caesar Salad",
+          description: "Tovuq filesi, romaine salati, parmesan, kruton va caesar sousi.",
+        },
+        fries: {
+          name: "Fri Kartoshka",
+          description: "Qarsildoq fri kartoshka, ketchup va maxsus ziravorlar bilan.",
+        },
+        cola: {
+          name: "Cola",
+          description: "Muzdek gazlangan ichimlik, 0.5 l.",
+        },
+      },
+    },
+    ru: {
+      brandEyebrow: "Витрина Qadam",
+      ordersLink: "Мои заказы",
+      adminLink: "Управление",
+      cart: "Корзина",
+      heroEyebrow: "Витрина ресторана",
+      heroTitle: "Qadam Demo",
+      heroDesc: "Статичное демо-меню с локальной корзиной и оформлением заказа.",
+      viewMenu: "Смотреть меню",
+      openCart: "Открыть корзину",
+      highlightFast: "Быстрый заказ",
+      highlightFresh: "Готовим свежим",
+      highlightDelivery: "Есть доставка",
+      promoPill: "Горячо и вкусно",
+      promoTitle: "Заказ в несколько шагов",
+      promoCopy: "Выберите блюда, наполните корзину и завершите заказ на этой странице.",
+      telegramVia: "Через Telegram",
+      botMeta: "В реальной версии заказы отправляются в Telegram-бот и админ-панель.",
+      menuEyebrow: "Сегодняшний выбор",
+      menuTitle: "Меню",
+      menuCopy: "Выбирайте по категориям и быстро добавляйте позиции.",
+      footerEyebrow: "Заказы и контакты",
+      footerDescription: "Статичное демо-меню. Заказы из этой версии не отправляются.",
+      unavailable: "Недоступно",
+      phone: "Телефон",
+      footerPhone: "Демо-контакт",
+      address: "Адрес",
+      footerAddress: "Демо-адрес",
+      hours: "Время работы",
+      footerHours: "Каждый день 10:00 - 22:00",
+      cartSubtitle: "Завершите заказ здесь",
+      itemCount: "{count} товаров",
+      clearCart: "Очистить",
+      close: "Закрыть",
+      emptyCart: "Корзина пока пуста. Добавьте любимое блюдо.",
+      total: "Итого",
+      name: "Имя",
+      namePlaceholder: "Ваше имя",
+      phonePlaceholder: "+998",
+      addressPlaceholder: "Адрес доставки",
+      comment: "Комментарий (необязательно)",
+      commentPlaceholder: "-",
+      submitOrder: "Отправить",
+      sending: "Отправляется...",
+      add: "Добавить",
+      added: "Добавлено",
+      addedToCart: "{name} добавлен в корзину",
+      piece: "шт.",
+      decreaseQty: "Уменьшить количество: {name}",
+      increaseQty: "Увеличить количество: {name}",
+      removeItem: "Удалить {name}",
+      all: "Все",
+      emptyCategory: "В этом разделе пока нет блюд.",
+      naturalBadge: "100% натурально",
+      recommendationBadge: "Рекомендация дня",
+      discountBadge: "Акция -{percent}%",
+      oldPrice: "Было: {price}",
+      emptyCartStatus: "Корзина пуста. Сначала добавьте блюдо из меню.",
+      successStatus: "Демо-заказ принят. В реальной версии заказ отправляется в Telegram-бот и админ-панель.",
+      toastSuccess: "Демо-заказ принят",
+      menuLoadError: "Не удалось загрузить меню",
+      error: "Ошибка",
+      demoMode: "Демо-режим",
+      categories: {
+        "Burgerlar": "Бургеры",
+        "Lavash": "Лаваш",
+        "Pizza": "Пицца",
+        "Salatlar": "Салаты",
+        "Snacklar": "Снэки",
+        "Ichimliklar": "Напитки",
+        "Menyu": "Меню",
+      },
+      items: {
+        "burger-classic": {
+          name: "Классический бургер",
+          description: "Котлета из говядины, сыр чеддер, свежие овощи и фирменный соус.",
+        },
+        "cheese-burger": {
+          name: "Чизбургер",
+          description: "Двойной чеддер, мягкая булочка, маринованные огурцы и бургер-соус.",
+        },
+        "lavash-chicken": {
+          name: "Куриный лаваш",
+          description: "Куриное филе, овощи, картофель фри и белый соус в лаваше.",
+        },
+        "beef-lavash": {
+          name: "Говяжий лаваш",
+          description: "Говядина, свежая зелень, помидоры и острый соус в большом лаваше.",
+        },
+        "pepperoni-pizza": {
+          name: "Пицца Пепперони",
+          description: "Горячая пицца с моцареллой, колбасой пепперони и томатным соусом.",
+        },
+        "margherita-pizza": {
+          name: "Пицца Маргарита",
+          description: "Классическая пицца с моцареллой, помидорами, базиликом и оливковым маслом.",
+        },
+        "caesar-salad": {
+          name: "Салат Цезарь",
+          description: "Куриное филе, салат ромэн, пармезан, крутоны и соус цезарь.",
+        },
+        fries: {
+          name: "Картофель фри",
+          description: "Хрустящий картофель фри с кетчупом и фирменными специями.",
+        },
+        cola: {
+          name: "Кола",
+          description: "Охлажденный газированный напиток, 0.5 л.",
+        },
+      },
+    },
+    en: {
+      brandEyebrow: "Qadam storefront",
+      ordersLink: "My orders",
+      adminLink: "Admin",
+      cart: "Cart",
+      heroEyebrow: "Restaurant storefront",
+      heroTitle: "Qadam Demo",
+      heroDesc: "Static demo menu with local cart and checkout preview.",
+      viewMenu: "View menu",
+      openCart: "Open cart",
+      highlightFast: "Fast order",
+      highlightFresh: "Freshly prepared",
+      highlightDelivery: "Delivery available",
+      promoPill: "Hot & tasty",
+      promoTitle: "Order in a few steps",
+      promoCopy: "Choose from the menu, fill your cart, and finish the order on this page.",
+      telegramVia: "Via Telegram",
+      botMeta: "The real version sends orders to a Telegram bot and admin panel.",
+      menuEyebrow: "Today's picks",
+      menuTitle: "Menu",
+      menuCopy: "Choose by category and quickly add items.",
+      footerEyebrow: "Orders and contacts",
+      footerDescription: "Static demo menu. Orders are not sent from this version.",
+      unavailable: "Unavailable",
+      phone: "Phone",
+      footerPhone: "Demo contact",
+      address: "Address",
+      footerAddress: "Demo address",
+      hours: "Hours",
+      footerHours: "Every day 10:00 - 22:00",
+      cartSubtitle: "Finish your order here",
+      itemCount: "{count} items",
+      clearCart: "Clear",
+      close: "Close",
+      emptyCart: "Your cart is empty. Add a favorite dish.",
+      total: "Total",
+      name: "Name",
+      namePlaceholder: "Your name",
+      phonePlaceholder: "+998",
+      addressPlaceholder: "Delivery address",
+      comment: "Note (optional)",
+      commentPlaceholder: "-",
+      submitOrder: "Send order",
+      sending: "Sending...",
+      add: "Add",
+      added: "Added",
+      addedToCart: "{name} added to cart",
+      piece: "pc",
+      decreaseQty: "Decrease quantity for {name}",
+      increaseQty: "Increase quantity for {name}",
+      removeItem: "Remove {name}",
+      all: "All",
+      emptyCategory: "There are no dishes in this section yet.",
+      naturalBadge: "100% natural",
+      recommendationBadge: "Today's pick",
+      discountBadge: "Promo -{percent}%",
+      oldPrice: "Was: {price}",
+      emptyCartStatus: "Cart is empty. Add something from the menu first.",
+      successStatus: "Demo order accepted. In the real version, this order is sent to Telegram bot and admin panel.",
+      toastSuccess: "Demo order accepted",
+      menuLoadError: "Menu could not be loaded",
+      error: "Error",
+      demoMode: "Demo mode",
+      categories: {
+        "Burgerlar": "Burgers",
+        "Lavash": "Lavash",
+        "Pizza": "Pizza",
+        "Salatlar": "Salads",
+        "Snacklar": "Snacks",
+        "Ichimliklar": "Drinks",
+        "Menyu": "Menu",
+      },
+      items: {
+        "burger-classic": {
+          name: "Classic Burger",
+          description: "Beef patty, cheddar cheese, fresh vegetables, and signature sauce.",
+        },
+        "cheese-burger": {
+          name: "Cheese Burger",
+          description: "Double cheddar, soft bun, pickles, and burger sauce.",
+        },
+        "lavash-chicken": {
+          name: "Chicken Lavash",
+          description: "Chicken fillet, vegetables, fries, and white sauce wrapped in lavash.",
+        },
+        "beef-lavash": {
+          name: "Beef Lavash",
+          description: "Beef, fresh herbs, tomatoes, and spicy sauce in a large lavash.",
+        },
+        "pepperoni-pizza": {
+          name: "Pepperoni Pizza",
+          description: "Hot pizza with mozzarella, pepperoni sausage, and tomato sauce.",
+        },
+        "margherita-pizza": {
+          name: "Margherita Pizza",
+          description: "Classic pizza with mozzarella, tomatoes, basil, and olive oil.",
+        },
+        "caesar-salad": {
+          name: "Caesar Salad",
+          description: "Chicken fillet, romaine lettuce, parmesan, croutons, and caesar sauce.",
+        },
+        fries: {
+          name: "Fries",
+          description: "Crispy fries with ketchup and signature spices.",
+        },
+        cola: {
+          name: "Cola",
+          description: "Chilled carbonated drink, 0.5 l.",
+        },
+      },
+    },
+  };
   const cart = new Map();
 
   let promotions = [];
@@ -54,6 +388,57 @@
   let menuCategories = [];
   let activeCategoryId = "all";
   let toastTimer = 0;
+  let currentLang = localStorage.getItem("qadamLang") || "uz";
+  if (!translations[currentLang]) {
+    currentLang = "uz";
+  }
+
+  function t(key, replacements) {
+    const dict = translations[currentLang] || translations.uz;
+    let value = dict[key] || translations.uz[key] || key;
+    if (replacements) {
+      Object.keys(replacements).forEach((name) => {
+        value = value.replace(`{${name}}`, replacements[name]);
+      });
+    }
+    return value;
+  }
+
+  function localizedCategory(title) {
+    const dict = translations[currentLang] || translations.uz;
+    return (dict.categories && dict.categories[title]) || title;
+  }
+
+  function localizedItem(item) {
+    const dict = translations[currentLang] || translations.uz;
+    return (dict.items && dict.items[item.id]) || item;
+  }
+
+  function applyLanguage(lang) {
+    currentLang = translations[lang] ? lang : "uz";
+    localStorage.setItem("qadamLang", currentLang);
+    document.documentElement.lang = currentLang;
+
+    document.querySelectorAll("[data-i18n]").forEach((el) => {
+      el.textContent = t(el.dataset.i18n);
+    });
+    document.querySelectorAll("[data-i18n-placeholder]").forEach((el) => {
+      el.setAttribute("placeholder", t(el.dataset.i18nPlaceholder));
+    });
+    langButtons.forEach((button) => {
+      button.classList.toggle("is-active", button.dataset.lang === currentLang);
+      button.setAttribute("aria-pressed", button.dataset.lang === currentLang ? "true" : "false");
+    });
+    updateCartToggles(Array.from(cart.values()).reduce((sum, entry) => sum + entry.qty, 0));
+    if (cartCount) {
+      cartCount.textContent = t("itemCount", { count: Array.from(cart.values()).reduce((sum, entry) => sum + entry.qty, 0) });
+    }
+    if (menuCategories.length) {
+      renderMenuFilters(menuCategories);
+      renderMenu(menuCategories);
+    }
+    renderCart();
+  }
 
   function isRenderableImageUrl(value) {
     if (!value || typeof value !== "string") {
@@ -186,7 +571,7 @@
   }
 
   function updateCartToggles(totalQty) {
-    const countLabel = totalQty ? `${totalQty} ta mahsulot` : "Savat";
+    const countLabel = totalQty ? t("itemCount", { count: totalQty }) : t("cart");
     if (mobileCartToggle) {
       mobileCartToggle.setAttribute("aria-label", countLabel);
     }
@@ -223,7 +608,7 @@
     const allButton = document.createElement("button");
     allButton.type = "button";
     allButton.className = `menu-filter-pill${activeCategoryId === "all" ? " is-active" : ""}`;
-    safeText(allButton, "Barcha");
+    safeText(allButton, t("all"));
     allButton.addEventListener("click", function () {
       activeCategoryId = "all";
       renderMenuFilters(menuCategories);
@@ -235,7 +620,7 @@
       const filterBtn = document.createElement("button");
       filterBtn.type = "button";
       filterBtn.className = `menu-filter-pill${activeCategoryId === String(category.id) ? " is-active" : ""}`;
-      safeText(filterBtn, category.title || "");
+      safeText(filterBtn, localizedCategory(category.title || ""));
       filterBtn.addEventListener("click", function () {
         activeCategoryId = String(category.id);
         renderMenuFilters(menuCategories);
@@ -258,7 +643,7 @@
   function setSubmitState(isLoading) {
     submitBtn.disabled = isLoading;
     submitBtn.classList.toggle("is-loading", isLoading);
-    submitBtn.textContent = isLoading ? "Yuborilmoqda..." : "Yuborish";
+    submitBtn.textContent = isLoading ? t("sending") : t("submitOrder");
   }
 
   function showCartToast(message) {
@@ -283,7 +668,7 @@
     if (lockedWidth) {
       button.style.width = `${lockedWidth}px`;
     }
-    button.textContent = "Qo'shildi";
+    button.textContent = t("added");
     button.disabled = true;
     button.classList.add("is-added");
     window.setTimeout(function () {
@@ -348,13 +733,13 @@
       orderForm.reset();
     }
     if (siteTitle) {
-      siteTitle.textContent = "Qadam menyusi";
+      siteTitle.textContent = t("menuTitle");
     }
     if (footerTitle) {
       footerTitle.textContent = "Qadam";
     }
     if (footerDescription) {
-      footerDescription.textContent = "Menyu, buyurtma va yetkazib berish bitta sahifada.";
+      footerDescription.textContent = t("footerDescription");
     }
     if (headerTelegramLink) {
       headerTelegramLink.style.display = "";
@@ -365,18 +750,20 @@
       botLink.href = "#";
     }
     if (footerTelegramLink) {
-      footerTelegramLink.textContent = "Mavjud emas";
+      footerTelegramLink.dataset.i18n = "unavailable";
+      footerTelegramLink.textContent = t("unavailable");
       footerTelegramLink.href = "#";
     }
     renderCart();
   }
 
   function addToCart(item, triggerButton) {
+    const displayItem = localizedItem(item);
     const current = cart.get(item.id) || { item, qty: 0 };
     current.qty += 1;
     cart.set(item.id, current);
     animateAddButton(triggerButton);
-    showCartToast(`${item.name || "Taom"} savatga qo'shildi`);
+    showCartToast(t("addedToCart", { name: displayItem.name || t("menuTitle") }));
     renderCart();
   }
 
@@ -409,7 +796,7 @@
     const items = Array.from(cart.values());
     const totalQty = items.reduce((sum, entry) => sum + entry.qty, 0);
     if (cartCount) {
-      cartCount.textContent = `${totalQty} ta mahsulot`;
+      cartCount.textContent = t("itemCount", { count: totalQty });
     }
     updateCartToggles(totalQty);
     clearBtn.disabled = !items.length;
@@ -424,6 +811,7 @@
     cartEmpty.style.display = "none";
     let total = 0;
     items.forEach(({ item, qty }) => {
+      const displayItem = localizedItem(item);
       const li = document.createElement("li");
       li.className = "cart-item";
       const lineTotal = effectivePrice(item.price) * qty;
@@ -435,12 +823,12 @@
       const info = document.createElement("div");
       const name = document.createElement("p");
       name.className = "cart-item-name";
-      safeText(name, item.name);
+      safeText(name, displayItem.name);
       info.appendChild(name);
 
       const sub = document.createElement("p");
       sub.className = "cart-item-sub";
-      safeText(sub, `${formatPrice(effectivePrice(item.price))} / dona`);
+      safeText(sub, `${formatPrice(effectivePrice(item.price))} / ${t("piece")}`);
       info.appendChild(sub);
 
       main.appendChild(info);
@@ -452,7 +840,7 @@
       const minusBtn = document.createElement("button");
       minusBtn.type = "button";
       minusBtn.className = "cart-qty-btn";
-      minusBtn.setAttribute("aria-label", `${item.name} sonini kamaytirish`);
+      minusBtn.setAttribute("aria-label", t("decreaseQty", { name: displayItem.name }));
       safeText(minusBtn, "-");
       minusBtn.addEventListener("click", function () {
         updateQty(item.id, -1);
@@ -465,7 +853,7 @@
       const plusBtn = document.createElement("button");
       plusBtn.type = "button";
       plusBtn.className = "cart-qty-btn";
-      plusBtn.setAttribute("aria-label", `${item.name} sonini oshirish`);
+      plusBtn.setAttribute("aria-label", t("increaseQty", { name: displayItem.name }));
       safeText(plusBtn, "+");
       plusBtn.addEventListener("click", function () {
         updateQty(item.id, 1);
@@ -478,7 +866,7 @@
       const removeBtn = document.createElement("button");
       removeBtn.type = "button";
       removeBtn.className = "cart-remove-btn";
-      removeBtn.setAttribute("aria-label", `${item.name} ni olib tashlash`);
+      removeBtn.setAttribute("aria-label", t("removeItem", { name: displayItem.name }));
       removeBtn.textContent = "x";
       removeBtn.addEventListener("click", function () {
         removeFromCart(item.id);
@@ -528,13 +916,14 @@
       }
 
       items.forEach((item) => {
+        const displayItem = localizedItem(item);
         const card = document.createElement("div");
         card.className = "menu-card";
 
         if (cat.title && cat.title.toLowerCase().includes("maxs")) {
           const badge = document.createElement("div");
           badge.className = "badge-green";
-          safeText(badge, "100% tabiy");
+          safeText(badge, t("naturalBadge"));
           card.appendChild(badge);
         }
 
@@ -544,14 +933,14 @@
         if (itemPromo) {
           const badge = document.createElement("div");
           badge.className = "badge-promo";
-          safeText(badge, "Kun tavsiyasi");
+          safeText(badge, t("recommendationBadge"));
           card.appendChild(badge);
         }
 
         if (discountPercent) {
           const badge = document.createElement("div");
           badge.className = "badge-promo-alt";
-          safeText(badge, `Aksiya -${discountPercent}%`);
+          safeText(badge, t("discountBadge", { percent: discountPercent }));
           card.appendChild(badge);
         }
 
@@ -561,7 +950,7 @@
         if (isRenderableImageUrl(imageUrl)) {
           const img = document.createElement("img");
           img.src = imageUrl;
-          img.alt = item.name || "";
+          img.alt = displayItem.name || "";
           img.loading = "lazy";
           img.className = "menu-image-loading";
           img.addEventListener("load", function () {
@@ -571,14 +960,14 @@
             imageWrap.innerHTML = "";
             const fallback = document.createElement("div");
             fallback.className = "img-placeholder";
-            safeText(fallback, item.name || "");
+            safeText(fallback, displayItem.name || "");
             imageWrap.appendChild(fallback);
           });
           imageWrap.appendChild(img);
         } else {
           const img = document.createElement("div");
           img.className = "img-placeholder";
-          safeText(img, item.name || "");
+          safeText(img, displayItem.name || "");
           imageWrap.appendChild(img);
         }
         card.appendChild(imageWrap);
@@ -588,13 +977,13 @@
 
         const title = document.createElement("h4");
         title.className = "menu-item-title";
-        safeText(title, item.name);
+        safeText(title, displayItem.name);
         body.appendChild(title);
 
-        if (item.description) {
+        if (displayItem.description) {
           const desc = document.createElement("p");
           desc.className = "menu-card-desc";
-          safeText(desc, item.description || "");
+          safeText(desc, displayItem.description || "");
           body.appendChild(desc);
         }
 
@@ -608,13 +997,13 @@
         if (discountPercent) {
           const note = document.createElement("div");
           note.className = "promo-note";
-          safeText(note, `Avval: ${formatPrice(item.price)}`);
+          safeText(note, t("oldPrice", { price: formatPrice(item.price) }));
           price.appendChild(note);
         }
         const btn = document.createElement("button");
         btn.className = "add-btn";
         btn.type = "button";
-        safeText(btn, "Qo'shish");
+        safeText(btn, t("add"));
         btn.addEventListener("click", function () {
           addToCart(item, btn);
         });
@@ -627,25 +1016,25 @@
     });
 
     if (!renderedSections) {
-      menuEl.innerHTML = `<div class="empty-state compact">Bu bo'limda hozircha taom yo'q.</div>`;
+      menuEl.innerHTML = `<div class="empty-state compact">${t("emptyCategory")}</div>`;
       return;
     }
     menuEl.appendChild(grid);
   }
 
   async function loadDemoProfile() {
-    heroTitle.textContent = "Qadam Demo";
-    heroDesc.textContent = "Static demo menu with local cart and checkout preview.";
+    heroTitle.textContent = t("heroTitle");
+    heroDesc.textContent = t("heroDesc");
     heroMedia.classList.add("hero-fallback");
     heroMedia.style.backgroundImage = "";
     if (siteTitle) {
-      siteTitle.textContent = "Qadam Demo";
+      siteTitle.textContent = t("heroTitle");
     }
     if (footerTitle) {
-      footerTitle.textContent = "Qadam Demo";
+      footerTitle.textContent = t("heroTitle");
     }
     if (footerDescription) {
-      footerDescription.textContent = "Static demo menu. Orders are not sent from this version.";
+      footerDescription.textContent = t("footerDescription");
     }
 
     if (ordersLink) {
@@ -658,28 +1047,29 @@
       headerTelegramLink.style.display = "none";
     }
     if (botLink) {
-      botLink.textContent = "Demo mode";
+      botLink.textContent = t("demoMode");
       botLink.removeAttribute("href");
     }
     if (footerTelegramLink) {
-      footerTelegramLink.textContent = "Demo mode";
+      footerTelegramLink.dataset.i18n = "demoMode";
+      footerTelegramLink.textContent = t("demoMode");
       footerTelegramLink.removeAttribute("href");
     }
     if (botQr) {
       botQr.removeAttribute("src");
     }
     if (botMeta) {
-      botMeta.textContent = "Real version sends orders to Telegram bot and admin panel.";
+      botMeta.textContent = t("botMeta");
     }
     if (footerPhone) {
-      footerPhone.textContent = "Demo contact";
+      footerPhone.textContent = t("footerPhone");
     }
 
     if (footerAddress) {
-      footerAddress.textContent = "Demo address";
+      footerAddress.textContent = t("footerAddress");
     }
     if (footerHours) {
-      footerHours.textContent = "Har kuni 10:00 - 22:00";
+      footerHours.textContent = t("footerHours");
     }
   }
 
@@ -692,7 +1082,7 @@
     renderMenuSkeleton(9);
     const res = await fetch(menuDataUrl, { cache: "no-store" });
     if (!res.ok) {
-      throw new Error("Menu yuklab bo'lmadi");
+      throw new Error(t("menuLoadError"));
     }
     const data = await res.json();
     menuCategories = buildCategories(normalizeMenuItems(data));
@@ -707,7 +1097,7 @@
     evt.preventDefault();
     setStatus("");
     if (!cart.size) {
-      setStatus("Savat bo'sh. Avval menyudan qo'shing.", "is-error");
+      setStatus(t("emptyCartStatus"), "is-error");
       return;
     }
     setSubmitState(true);
@@ -726,12 +1116,12 @@
       window.setTimeout(function () {
         console.info("Qadam demo order", demoOrder);
       }, 0);
-      setStatus(demoSuccessMessage, "is-success");
-      showCartToast("Demo order accepted");
+      setStatus(t("successStatus"), "is-success");
+      showCartToast(t("toastSuccess"));
       clearCart();
       orderForm.reset();
     } catch (err) {
-      setStatus((err && err.message) || "Xatolik", "is-error");
+      setStatus((err && err.message) || t("error"), "is-error");
     } finally {
       setSubmitState(false);
     }
@@ -744,8 +1134,10 @@
       await loadDemoProfile();
       await loadPromotions();
       await loadMenu();
+      applyLanguage(currentLang);
     } catch (err) {
-      const message = (err && err.message) || "Xatolik";
+      const message = (err && err.message) || t("error");
+      applyLanguage(currentLang);
       setStatus(message, "is-error");
       menuEl.innerHTML = `<p class="muted">${message}</p>`;
     }
@@ -753,6 +1145,11 @@
 
   clearBtn.addEventListener("click", clearCart);
   orderForm.addEventListener("submit", submitOrder);
+  langButtons.forEach((button) => {
+    button.addEventListener("click", function () {
+      applyLanguage(button.dataset.lang);
+    });
+  });
   cartTriggers.forEach((trigger) => {
     trigger.addEventListener("click", function () {
       lastCartTrigger = trigger;

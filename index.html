@@ -4,21 +4,27 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Qadam Delivery</title>
+  <link rel="icon" type="image/png" href="./assets/favicon.png" />
   <link rel="stylesheet" href="./static/style.css" />
 </head>
 <body class="public-menu-page">
   <div class="page">
     <header class="site-header">
       <div class="brand-block">
-        <p class="eyebrow">Qadam storefront</p>
+        <p class="eyebrow" data-i18n="brandEyebrow">Qadam storefront</p>
         <h1 id="site-title">Qadam menyusi</h1>
       </div>
       <div class="site-actions">
-        <a class="ghost-btn" id="orders-link" href="#">Buyurtmalarim</a>
+        <div class="lang-switch" aria-label="Language">
+          <button class="lang-btn" type="button" data-lang="uz">UZ</button>
+          <button class="lang-btn" type="button" data-lang="ru">RU</button>
+          <button class="lang-btn" type="button" data-lang="en">EN</button>
+        </div>
+        <a class="ghost-btn" id="orders-link" href="#" data-i18n="ordersLink">Buyurtmalarim</a>
         <a class="ghost-btn" id="header-telegram-link" href="#" target="_blank" rel="noopener">Telegram</a>
-        <a class="ghost-btn" id="admin-link" href="#">Boshqaruv</a>
+        <a class="ghost-btn" id="admin-link" href="#" data-i18n="adminLink">Boshqaruv</a>
         <button class="ghost-btn cart-trigger" id="header-cart-toggle" type="button" aria-label="Savat">
-          <span class="cart-button-label">Savat</span>
+          <span class="cart-button-label" data-i18n="cart">Savat</span>
           <span class="cart-action-badge" id="header-cart-badge" hidden>0</span>
         </button>
       </div>
@@ -30,24 +36,24 @@
         <div class="hero-overlay"></div>
         <div class="hero-layout">
           <div class="hero-content">
-            <p class="hero-eyebrow">Restoran vitrinasi</p>
-            <h2 id="hero-title">Qadam</h2>
-            <p id="hero-desc" class="hero-desc">Mazali taomlar va tez yetkazib berish.</p>
+            <p class="hero-eyebrow" data-i18n="heroEyebrow">Restoran vitrinasi</p>
+            <h2 id="hero-title" data-i18n="heroTitle">Qadam</h2>
+            <p id="hero-desc" class="hero-desc" data-i18n="heroDesc">Mazali taomlar va tez yetkazib berish.</p>
             <div class="hero-actions">
-              <button class="ghost-btn hero-btn" id="hero-cta" type="button">Menyuni ko'rish</button>
-              <button class="ghost-btn hero-secondary cart-trigger" type="button">Savatni ochish</button>
+              <button class="ghost-btn hero-btn" id="hero-cta" type="button" data-i18n="viewMenu">Menyuni ko'rish</button>
+              <button class="ghost-btn hero-secondary cart-trigger" type="button" data-i18n="openCart">Savatni ochish</button>
             </div>
             <div class="hero-highlights">
-              <span class="hero-chip">Tez buyurtma</span>
-              <span class="hero-chip">Yangi pishiriladi</span>
-              <span class="hero-chip">Yetkazib berish mavjud</span>
+              <span class="hero-chip" data-i18n="highlightFast">Tez buyurtma</span>
+              <span class="hero-chip" data-i18n="highlightFresh">Yangi pishiriladi</span>
+              <span class="hero-chip" data-i18n="highlightDelivery">Yetkazib berish mavjud</span>
             </div>
           </div>
           <aside class="hero-aside">
             <div class="promo-plate">
-              <p class="pill">Issiq &amp; mazali</p>
-              <h3>Buyurtma bir necha qadamda</h3>
-              <p class="promo-copy">
+              <p class="pill" data-i18n="promoPill">Issiq &amp; mazali</p>
+              <h3 data-i18n="promoTitle">Buyurtma bir necha qadamda</h3>
+              <p class="promo-copy" data-i18n="promoCopy">
                 Menyudan tanlang, savatni to'ldiring va buyurtmani shu sahifada yakunlang.
               </p>
               <div class="promo-qr">
@@ -55,9 +61,9 @@
                   <img id="bot-qr" alt="Telegram QR" />
                 </div>
                 <div class="promo-meta">
-                  <span>Telegram orqali</span>
+                  <span data-i18n="telegramVia">Telegram orqali</span>
                   <a id="bot-link" href="#" target="_blank" rel="noopener">@bot</a>
-                  <small id="bot-meta">Bot mavjud bo'lsa tezkor buyurtma uchun foydalaning</small>
+                  <small id="bot-meta" data-i18n="botMeta">Bot mavjud bo'lsa tezkor buyurtma uchun foydalaning</small>
                 </div>
               </div>
             </div>
@@ -68,10 +74,10 @@
       <section class="menu-discovery">
         <div class="menu-toolbar">
           <div>
-            <p class="eyebrow">Bugungi tanlov</p>
-            <h2>Menyu</h2>
+            <p class="eyebrow" data-i18n="menuEyebrow">Bugungi tanlov</p>
+            <h2 data-i18n="menuTitle">Menyu</h2>
           </div>
-          <p class="menu-toolbar-copy">Kategoriya bo'yicha tanlang va mahsulotlarni tez qo'shing.</p>
+          <p class="menu-toolbar-copy" data-i18n="menuCopy">Kategoriya bo'yicha tanlang va mahsulotlarni tez qo'shing.</p>
         </div>
         <div id="menu-filters" class="menu-filters"></div>
       </section>
@@ -80,26 +86,26 @@
 
     <footer class="site-footer">
       <div class="footer-brand">
-        <p class="eyebrow">Buyurtma va aloqa</p>
+        <p class="eyebrow" data-i18n="footerEyebrow">Buyurtma va aloqa</p>
         <h2 id="footer-title">Qadam</h2>
-        <p id="footer-description" class="footer-copy">Menyu, buyurtma va yetkazib berish bitta sahifada.</p>
+        <p id="footer-description" class="footer-copy" data-i18n="footerDescription">Menyu, buyurtma va yetkazib berish bitta sahifada.</p>
       </div>
       <div class="footer-grid">
         <div class="footer-card">
           <span class="footer-label">Telegram / bot</span>
-          <a id="footer-telegram-link" href="#" target="_blank" rel="noopener">Mavjud emas</a>
+          <a id="footer-telegram-link" href="#" target="_blank" rel="noopener" data-i18n="unavailable">Mavjud emas</a>
         </div>
         <div class="footer-card">
-          <span class="footer-label">Telefon</span>
-          <span id="footer-phone">Telefon raqami mavjud emas</span>
+          <span class="footer-label" data-i18n="phone">Telefon</span>
+          <span id="footer-phone" data-i18n="footerPhone">Telefon raqami mavjud emas</span>
         </div>
         <div class="footer-card">
-          <span class="footer-label">Manzil</span>
-          <span id="footer-address">Yetkazib berish manzili buyurtma vaqtida aniqlanadi</span>
+          <span class="footer-label" data-i18n="address">Manzil</span>
+          <span id="footer-address" data-i18n="footerAddress">Yetkazib berish manzili buyurtma vaqtida aniqlanadi</span>
         </div>
         <div class="footer-card">
-          <span class="footer-label">Ish vaqti</span>
-          <span id="footer-hours">Har kuni 10:00 - 22:00</span>
+          <span class="footer-label" data-i18n="hours">Ish vaqti</span>
+          <span id="footer-hours" data-i18n="footerHours">Har kuni 10:00 - 22:00</span>
         </div>
       </div>
     </footer>
@@ -110,46 +116,46 @@
       <div class="cart-scroll">
       <div class="cart-head">
         <div>
-          <p class="section-title">Savat</p>
-          <small class="muted">Buyurtmani shu yerda yakunlang</small>
+          <p class="section-title" data-i18n="cart">Savat</p>
+          <small class="muted" data-i18n="cartSubtitle">Buyurtmani shu yerda yakunlang</small>
           <small id="cart-count" class="cart-count muted">0 ta mahsulot</small>
         </div>
         <div class="cart-head-actions">
-          <button id="clear-cart" class="ghost-btn" type="button">Tozalash</button>
-          <button id="mobile-cart-close" class="ghost-btn mobile-cart-close" type="button">Yopish</button>
+          <button id="clear-cart" class="ghost-btn" type="button" data-i18n="clearCart">Tozalash</button>
+          <button id="mobile-cart-close" class="ghost-btn mobile-cart-close" type="button" data-i18n="close">Yopish</button>
         </div>
       </div>
       <div class="cart-items">
         <div class="cart-body">
-          <div id="cart-empty" class="muted">Savat hozircha bo'sh. Yoqtirgan taomingizni qo'shing.</div>
+          <div id="cart-empty" class="muted" data-i18n="emptyCart">Savat hozircha bo'sh. Yoqtirgan taomingizni qo'shing.</div>
           <ul id="cart-list" class="cart-list"></ul>
         </div>
       </div>
       <div class="cart-form">
         <div class="cart-summary">
-          <p class="muted cart-summary-label">Umumiy summa</p>
+          <p class="muted cart-summary-label" data-i18n="total">Umumiy summa</p>
           <p id="cart-total" class="total-line"></p>
         </div>
         <form id="order-form" class="form">
           <div class="grid-two">
             <div class="field">
-              <label>Ism</label>
-              <input name="name" autocomplete="name" required />
+              <label data-i18n="name">Ism</label>
+              <input name="name" autocomplete="name" required data-i18n-placeholder="namePlaceholder" />
             </div>
             <div class="field">
-              <label>Telefon</label>
-              <input name="phone" autocomplete="tel" required />
+              <label data-i18n="phone">Telefon</label>
+              <input name="phone" autocomplete="tel" required data-i18n-placeholder="phonePlaceholder" />
             </div>
           </div>
           <div class="field">
-            <label>Manzil</label>
-            <textarea name="address" autocomplete="street-address" required></textarea>
+            <label data-i18n="address">Manzil</label>
+            <textarea name="address" autocomplete="street-address" required data-i18n-placeholder="addressPlaceholder"></textarea>
           </div>
           <div class="field">
-            <label>Izoh (ixtiyoriy)</label>
-            <textarea name="comment" placeholder="-"></textarea>
+            <label data-i18n="comment">Izoh (ixtiyoriy)</label>
+            <textarea name="comment" placeholder="-" data-i18n-placeholder="commentPlaceholder"></textarea>
           </div>
-          <button type="submit" id="submit-order">Yuborish</button>
+          <button type="submit" id="submit-order" data-i18n="submitOrder">Yuborish</button>
           <p id="order-status" class="muted status"></p>
         </form>
       </div>
@@ -157,7 +163,7 @@
       <button class="scroll-to-form-fab" id="scroll-to-form-fab" aria-label="Scroll to form">↓</button>
     </aside>
   <button id="mobile-cart-toggle" class="mobile-cart-toggle cart-trigger" type="button" aria-label="Savat">
-    <span class="cart-button-label">Savat</span>
+    <span class="cart-button-label" data-i18n="cart">Savat</span>
     <span class="cart-action-badge" id="mobile-cart-badge" hidden>0</span>
   </button>
   <div id="cart-toast" class="cart-toast" aria-live="polite" aria-atomic="true"></div>
