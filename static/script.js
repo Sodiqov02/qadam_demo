@@ -1217,12 +1217,12 @@
   }
   if (scrollToFormFab) {
     scrollToFormFab.addEventListener("click", function () {
-      if (!cartForm) {
+      if (!cartForm || !cartScroll) {
         return;
       }
-      cartForm.scrollIntoView({
+      cartScroll.scrollTo({
+        top: cartForm.offsetTop - 12,
         behavior: "smooth",
-        block: "center",
       });
     });
   }
