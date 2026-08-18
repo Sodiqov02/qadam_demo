@@ -42,6 +42,7 @@
   const cartTriggers = document.querySelectorAll(".cart-trigger");
   const langButtons = document.querySelectorAll("[data-lang]");
   let lastCartTrigger = null;
+  let menuImageObserver = null;
 
   if (!menuEl || !orderForm || !statusEl) {
     return;
@@ -946,10 +947,32 @@
   }
 
   function renderMenu(categories) {
+    if (menuImageObserver) {
+      menuImageObserver.disconnect();
+      menuImageObserver = null;
+    }
+    if (typeof window.IntersectionObserver === "function") {
+      const observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) {
+            return;
+          }
+          const img = entry.target;
+          const source = img.dataset.src;
+          if (source) {
+            img.src = source;
+            delete img.dataset.src;
+          }
+          observer.unobserve(img);
+        });
+      }, { rootMargin: "300px 0px" });
+      menuImageObserver = observer;
+    }
     menuEl.innerHTML = "";
     const grid = document.createElement("div");
     grid.className = "menu-section-grid";
     let renderedSections = 0;
+    let renderedImageCount = 0;
     const visibleCategories = categories.filter((cat) => {
       if (activeCategoryId === "all") {
         return true;
@@ -997,9 +1020,10 @@
         const imageUrl = item.image || item.image_url;
         if (isRenderableImageUrl(imageUrl)) {
           const img = document.createElement("img");
-          img.src = imageUrl;
           img.alt = displayItem.name || "";
-          img.loading = "lazy";
+          img.width = 1080;
+          img.height = 800;
+          img.decoding = "async";
           img.className = "menu-image-loading";
           img.addEventListener("load", function () {
             img.classList.remove("menu-image-loading");
@@ -1011,6 +1035,20 @@
             safeText(fallback, displayItem.name || "");
             imageWrap.appendChild(fallback);
           });
+          if (renderedImageCount === 0) {
+            img.loading = "eager";
+            img.fetchPriority = "high";
+            img.src = imageUrl;
+          } else {
+            img.loading = "lazy";
+            if (menuImageObserver) {
+              img.dataset.src = imageUrl;
+              menuImageObserver.observe(img);
+            } else {
+              img.src = imageUrl;
+            }
+          }
+          renderedImageCount += 1;
           imageWrap.appendChild(img);
         } else {
           const img = document.createElement("div");

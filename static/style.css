@@ -1201,7 +1201,7 @@ body.public-menu-page .hero-layout {
   padding: 34px 36px;
   align-items: end;
   overflow: hidden;
-  background: url("../assets/зал .png") center / cover no-repeat;
+  background: url("../assets/hero-restaurant.webp") center / cover no-repeat;
 }
 
 body.public-menu-page .hero-layout::before {
@@ -1775,7 +1775,9 @@ body.public-menu-page .cart-pane {
   z-index: 45;
   overflow: hidden;
   height: calc(100vh - 48px);
-  will-change: transform, opacity;
+  content-visibility: hidden;
+  contain: layout paint style;
+  will-change: auto;
 }
 
 body.public-menu-page .cart-scroll {
@@ -1992,7 +1994,7 @@ body.public-menu-page .menu-filter-pill {
 }
 
 body.public-menu-page .mobile-cart-backdrop {
-  display: block;
+  display: none;
   position: fixed;
   inset: 0;
   background: rgba(15, 23, 42, 0.46);
@@ -2011,10 +2013,14 @@ body.public-menu-page.cart-open .cart-pane {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
+  content-visibility: visible;
+  contain: none;
+  will-change: transform, opacity;
   transition: transform 240ms ease, opacity 180ms ease;
 }
 
 body.public-menu-page.cart-open .mobile-cart-backdrop {
+  display: block;
   opacity: 1;
   pointer-events: auto;
 }
@@ -2819,6 +2825,57 @@ body.public-menu-page .footer-label {
 
   body.public-menu-page .promo-copy {
     font-size: 0.92rem;
+  }
+}
+
+/* Mobile performance: keep the premium look without scroll-time blur/compositing. */
+@media (max-width: 768px) {
+  body.public-menu-page .hero {
+    box-shadow: 0 16px 36px rgba(21, 25, 35, 0.16);
+  }
+
+  body.public-menu-page .hero-media::after {
+    content: none;
+    display: none;
+  }
+
+  body.public-menu-page .hero-content,
+  body.public-menu-page .promo-plate,
+  body.public-menu-page .hero-chip,
+  body.public-menu-page .hero-btn,
+  body.public-menu-page .menu-filters {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  body.public-menu-page .promo-plate {
+    background: rgba(13, 18, 27, 0.92);
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.2);
+  }
+
+  body.public-menu-page .hero-content {
+    background: rgba(13, 18, 27, 0.82);
+  }
+
+  body.public-menu-page .hero-btn,
+  body.public-menu-page .hero-secondary,
+  body.public-menu-page .hero-chip {
+    box-shadow: none;
+  }
+
+  body.public-menu-page .menu-card-skeleton .menu-item-image,
+  body.public-menu-page .menu-card-skeleton .skeleton-line,
+  body.public-menu-page .menu-card-skeleton .skeleton-chip,
+  body.public-menu-page .skeleton {
+    animation: none;
+    background-size: 100% 100%;
+  }
+}
+
+@media (hover: none) and (pointer: coarse) {
+  body.public-menu-page .menu-card:hover,
+  body.public-menu-page button:hover {
+    transform: none;
   }
 }
 
