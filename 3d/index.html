@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Osh — 50 000 сум. Посмотрите блюдо в 3D и дополненной реальности." />
+  <title>Osh · 3D и AR — Qadam Demo</title>
+  <link rel="icon" href="../assets/favicon.png" type="image/png" />
+  <link rel="stylesheet" href="./style.css" />
+  <script type="module" src="./app.js"></script>
+</head>
+<body>
+  <div class="demo-page">
+    <header class="demo-header">
+      <div><p class="eyebrow">Qadam storefront</p><a class="brand" href="../">Qadam Demo</a></div>
+      <a class="ghost-btn" href="../">В меню</a>
+    </header>
+    <main>
+      <div class="demo-intro"><p class="eyebrow">3D и AR</p><h1>Рассмотрите блюдо со всех сторон</h1>
+        <p>Откройте модель, вращайте и приближайте её. На совместимом телефоне можно посмотреть блюдо в AR.</p></div>
+      <article class="dish-card" aria-labelledby="dish-title">
+        <img class="dish-image" src="./assets/preview.webp" alt="Тарелка плова Osh" width="800" height="650" />
+        <div class="dish-body"><h2 id="dish-title">Osh <span>— 50 000 сум</span></h2>
+          <p>Плов с рисом, мясом и морковью.</p>
+          <button id="view-osh" class="ghost-btn osh-view-button" type="button" aria-label="Посмотреть плов в 3D" aria-haspopup="dialog">Посмотреть</button>
+          <p id="viewer-message" role="status" aria-live="polite" hidden></p>
+          <noscript><p>Для интерактивного просмотра включите JavaScript.</p></noscript>
+        </div>
+      </article>
+    </main>
+  </div>
+</body>
+</html>

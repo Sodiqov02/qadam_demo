@@ -1,0 +1,38 @@
+:root { color-scheme: light; --text: #111827; --muted: #6b7280; }
+*, *::before, *::after { box-sizing: border-box; }
+body { margin: 0; min-height: 100vh; font-family: Inter, system-ui, -apple-system, sans-serif; color: var(--text); background: radial-gradient(circle at top left, #22d3ee16, transparent 24%), radial-gradient(circle at top right, #10b98116, transparent 22%), linear-gradient(#f8fafc, #f5f5f7); }
+.demo-page { max-width: 1040px; margin: auto; padding: 24px; }
+.demo-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-bottom: 24px; border-bottom: 1px solid #e4e7ec; }
+.eyebrow { margin: 0 0 8px; color: var(--muted); font-size: 11px; letter-spacing: .15em; text-transform: uppercase; }
+.brand { color: inherit; text-decoration: none; font-size: 24px; font-weight: 700; }
+.ghost-btn { display: inline-block; background: transparent; color: var(--muted); border: 1px solid #e4e7ec; border-radius: 10px; padding: 10px 16px; min-height: 44px; cursor: pointer; font: inherit; text-decoration: none; }
+.ghost-btn:hover { color: var(--text); background: #ffffffad; border-color: #cbd5e1; }
+.ghost-btn:focus-visible { outline: 3px solid #0f766e; outline-offset: 3px; }
+.ghost-btn:disabled { opacity: .6; cursor: wait; }
+.demo-intro { margin: 32px 0 24px; max-width: 640px; }
+.demo-intro h1 { margin: 0 0 12px; font-size: clamp(24px, 4vw, 32px); line-height: 1.2; }
+.demo-intro > p:last-child, .dish-body > p { color: var(--muted); line-height: 1.6; }
+.dish-card { max-width: 460px; overflow: hidden; border: 1px solid #e4e7ec; border-radius: 20px; background: white; box-shadow: 0 18px 40px #0f172a14; }
+.dish-image { display: block; width: 100%; height: auto; object-fit: contain; background: #eeeae2; }
+.dish-body { padding: 22px; }
+.dish-body h2 { margin: 0; font-size: 24px; }
+.dish-body h2 span { font-weight: 500; font-size: 20px; }
+.osh-view-button { width: 100%; color: #0f766e; border-color: #10b981; font-weight: 600; }
+@media(max-width: 600px) { .demo-page { padding: 16px; } .demo-header { padding-bottom: 18px; } .demo-intro { margin-top: 24px; } }
+.osh-dialog { color: #252820; background: #faf9f5; border: 1px solid #d8d8cd; border-radius: 20px; padding: 0; width: min(900px, calc(100vw - 24px)); max-width: none; max-height: calc(100dvh - 24px); overflow: auto; }
+.osh-dialog .ghost-btn { color: #34382d; border-color: #c7c9c0; min-height: 40px; }
+.osh-dialog::backdrop { background: #000b; backdrop-filter: blur(5px); }
+.osh-header, .osh-footer { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 16px 22px; }
+.osh-header h2 { margin: 0; font-size: 22px; }
+.osh-close { min-width: 44px; min-height: 44px; }
+.osh-stage { position: relative; height: min(58dvh, 520px); min-height: 220px; background: #eeeae2; }
+.osh-fallback, .osh-stage model-viewer { position: absolute; inset: 0; width: 100%; height: 100%; }
+.osh-fallback { object-fit: contain; }
+.osh-stage model-viewer { background: #eeeae2; --poster-color: #eeeae2; touch-action: none; }
+.osh-stage { touch-action: none; }
+.osh-status { margin: 14px 22px 0; font-size: 14px; }
+.osh-footer { font-size: 13px; }
+.osh-footer span { max-width: 470px; }
+.osh-dialog .osh-ar { position: absolute; bottom: 18px; left: 50%; transform: translateX(-50%); background: #252820; color: white; white-space: nowrap; }
+.osh-dialog [hidden] { display: none !important; }
+@media(max-width: 600px) { .osh-footer { flex-wrap: wrap; padding: 14px; } .osh-header { padding: 14px; } .osh-status { margin-left: 14px; margin-right: 14px; } .osh-stage { height: 48dvh; } }
