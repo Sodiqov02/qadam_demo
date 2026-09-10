@@ -88,7 +88,7 @@ export function openOshViewer(trigger) {
         'min-camera-orbit': 'auto 0deg 60%', 'max-camera-orbit': 'auto 90deg 200%',
         'touch-action': 'none', 'shadow-intensity': '0.5', exposure: '0.85',
         'environment-image': 'neutral', 'interaction-prompt': 'none',
-        ar: '', 'ar-modes': 'webxr scene-viewer quick-look', 'ar-placement': 'floor',
+        ar: '', 'ar-modes': 'scene-viewer webxr quick-look', 'ar-placement': 'floor',
         'ar-scale': 'fixed', loading: 'eager', reveal: 'auto'
       };
       Object.entries(attrs).forEach(([key, value]) => viewer.setAttribute(key, value));

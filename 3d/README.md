@@ -52,7 +52,9 @@ is suppressed so it does not intercept touches at the centre of the model.
 Network errors offer a retry with a fresh model cache key. Missing WebGL falls
 back to the preview image. AR starts only from the separate AR button.
 
-Android uses `webxr scene-viewer`; iPhone uses `quick-look` and the explicit
+Android prefers `scene-viewer` and falls back to `webxr`; putting Scene Viewer
+first avoids Samsung Internet stalling on WebXR capability detection. iPhone
+uses `quick-look` and the explicit
 `ios-src` URL of `osh.usdz`. Model URLs resolve to the public Pages origin;
 there are no hardcoded localhost or domain-root paths in the page.
 
