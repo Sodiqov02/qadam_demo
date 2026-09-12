@@ -11,8 +11,9 @@ function loadViewer() {
   return library;
 }
 
-export function mountModelViewer({ stage, status, reset, retry, debugHost, title, alt, glbUrl, usdzUrl }) {
+export function mountModelViewer({ stage, status, reset, retry, debugHost, title, alt, glbUrl, usdzUrl = null, arModes }) {
   if (!stage || !status || !reset || !retry) throw new Error('Missing model viewer mount element');
+  const configuredArModes = arModes || (usdzUrl ? 'webxr scene-viewer quick-look' : 'webxr scene-viewer');
 
   let viewer, loadTimer, capabilityTimer, attempt = 0;
   const diagnostics = {
@@ -161,7 +162,6 @@ export function mountModelViewer({ stage, status, reset, retry, debugHost, title
       if (modelRetry) modelUrl.searchParams.set('retry', String(modelRetry));
       const attrs = {
         src: modelUrl.href,
-        'ios-src': usdzUrl,
         alt,
         'camera-controls': '',
         'disable-pan': '',
@@ -174,12 +174,13 @@ export function mountModelViewer({ stage, status, reset, retry, debugHost, title
         'environment-image': 'neutral',
         'interaction-prompt': 'auto',
         ar: '',
-        'ar-modes': 'webxr scene-viewer quick-look',
+        'ar-modes': configuredArModes,
         'ar-placement': 'floor',
         'ar-scale': 'auto',
         loading: 'eager',
         reveal: 'auto'
       };
+      if (usdzUrl) attrs['ios-src'] = usdzUrl;
       Object.entries(attrs).forEach(([key, value]) => viewer.setAttribute(key, value));
 
       const ar = document.createElement('button');

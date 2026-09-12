@@ -7,9 +7,11 @@ const { test } = require('node:test');
 const viewerSource = fs.readFileSync(path.join(__dirname, '../viewer.js'), 'utf8');
 const catalogHtml = fs.readFileSync(path.join(__dirname, '../index.html'), 'utf8');
 const plovHtml = fs.readFileSync(path.join(__dirname, '../plov/index.html'), 'utf8');
+const fruitsHtml = fs.readFileSync(path.join(__dirname, '../fruits/index.html'), 'utf8');
+const fruitsApp = fs.readFileSync(path.join(__dirname, '../fruits/app.js'), 'utf8');
 const descendants = element => element.children.flatMap(child => [child, ...descendants(child)]);
 
-async function setup({ supported = true, xr = false, debug = true, webgl = true } = {}) {
+async function setup({ supported = true, xr = false, debug = true, webgl = true, usdz = true } = {}) {
   const intervals = new Set();
   let viewer, activations = 0, inClick = false, copied = '';
 
@@ -71,7 +73,8 @@ async function setup({ supported = true, xr = false, debug = true, webgl = true 
     stage, status, reset, retry, debugHost,
     title: 'Demo Plov', alt: 'Plov model',
     glbUrl: 'https://sodiqov02.github.io/qadam_demo/3d/assets/osh.glb',
-    usdzUrl: 'https://sodiqov02.github.io/qadam_demo/3d/assets/osh.usdz'
+    usdzUrl: usdz ? 'https://sodiqov02.github.io/qadam_demo/3d/assets/osh.usdz' : null,
+    arModes: usdz ? 'webxr scene-viewer quick-look' : 'webxr scene-viewer'
   });
   await new Promise(resolve => setImmediate(resolve));
 
@@ -141,12 +144,30 @@ test('WebGL failure retains poster and offers retry', async () => {
   assert.equal(page.stage.children.some(element => element.tag === 'model-viewer'), false);
 });
 
-test('catalog stays lightweight and routes to the dedicated Plov page', () => {
+test('model without USDZ keeps Android AR and disables Quick Look', async () => {
+  const page = await setup({ usdz: false });
+  const viewer = page.viewer();
+  assert.equal(viewer.attrs['ar-modes'], 'webxr scene-viewer');
+  assert.equal(Object.hasOwn(viewer.attrs, 'ios-src'), false);
+  page.load();
+  page.click(page.arButton());
+  assert.equal(page.count(), 1);
+});
+
+test('catalog stays lightweight and routes to both model pages', () => {
   assert.match(catalogHtml, /href="\.\/plov\/"/);
+  assert.match(catalogHtml, /href="\.\/fruits\/"/);
   assert.match(catalogHtml, /src="\.\/assets\/preview\.webp"/);
-  assert.doesNotMatch(catalogHtml, /osh\.glb|osh\.usdz|model-viewer/i);
+  assert.match(catalogHtml, /src="\.\/assets\/fruits-preview\.webp"/);
+  assert.doesNotMatch(catalogHtml, /\.glb|\.usdz|model-viewer/i);
   assert.match(plovHtml, /src="\.\/app\.js"/);
   assert.match(plovHtml, /src="\.\.\/assets\/preview\.webp"/);
   assert.equal(new URL('../assets/osh.glb', 'https://sodiqov02.github.io/qadam_demo/3d/plov/app.js').href,
     'https://sodiqov02.github.io/qadam_demo/3d/assets/osh.glb');
+  assert.match(fruitsHtml, /src="\.\.\/assets\/fruits-preview\.webp"/);
+  assert.match(fruitsApp, /pageUrl\('fruits\.glb'\)/);
+  assert.match(fruitsApp, /arModes: 'webxr scene-viewer'/);
+  assert.doesNotMatch(fruitsApp, /usdz|quick-look/i);
+  assert.equal(new URL('../assets/fruits.glb', 'https://sodiqov02.github.io/qadam_demo/3d/fruits/app.js').href,
+    'https://sodiqov02.github.io/qadam_demo/3d/assets/fruits.glb');
 });
