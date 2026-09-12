@@ -9,6 +9,8 @@ const catalogHtml = fs.readFileSync(path.join(__dirname, '../index.html'), 'utf8
 const plovHtml = fs.readFileSync(path.join(__dirname, '../plov/index.html'), 'utf8');
 const fruitsHtml = fs.readFileSync(path.join(__dirname, '../fruits/index.html'), 'utf8');
 const fruitsApp = fs.readFileSync(path.join(__dirname, '../fruits/app.js'), 'utf8');
+const homepageHtml = fs.readFileSync(path.join(__dirname, '../../index.html'), 'utf8');
+const homepageScript = fs.readFileSync(path.join(__dirname, '../../static/script.js'), 'utf8');
 const descendants = element => element.children.flatMap(child => [child, ...descendants(child)]);
 
 async function setup({ supported = true, xr = false, debug = true, webgl = true, usdz = true } = {}) {
@@ -170,4 +172,16 @@ test('catalog stays lightweight and routes to both model pages', () => {
   assert.doesNotMatch(fruitsApp, /usdz|quick-look/i);
   assert.equal(new URL('../assets/fruits.glb', 'https://sodiqov02.github.io/qadam_demo/3d/fruits/app.js').href,
     'https://sodiqov02.github.io/qadam_demo/3d/assets/fruits.glb');
+});
+
+test('homepage promotes both models with project-relative localized links', () => {
+  assert.match(homepageHtml, /href="\.\/3d\/plov\/"/);
+  assert.match(homepageHtml, /href="\.\/3d\/fruits\/"/);
+  assert.match(homepageHtml, /src="\.\/3d\/assets\/preview\.webp"/);
+  assert.match(homepageHtml, /src="\.\/3d\/assets\/fruits-preview\.webp"/);
+  assert.doesNotMatch(homepageHtml, /href="\/3d\//);
+  assert.match(homepageScript, /arShowcaseTitle: "Taomni stolingizda ko‘ring"/);
+  assert.match(homepageScript, /arShowcaseTitle: "Посмотрите блюдо на своём столе"/);
+  assert.match(homepageScript, /arShowcaseTitle: "See the dish on your table"/);
+  assert.equal((homepageScript.match(/arShowcaseCta:/g) || []).length, 3);
 });
