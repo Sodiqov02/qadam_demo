@@ -3,31 +3,38 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="Osh — 50 000 сум. Посмотрите блюдо в 3D и дополненной реальности." />
-  <title>Osh · 3D и AR — Qadam Demo</title>
+  <meta name="description" content="Qadam 3D / AR Demo — демонстрационный каталог блюд в 3D и дополненной реальности." />
+  <title>Qadam 3D / AR Demo</title>
   <link rel="icon" href="../assets/favicon.png" type="image/png" />
   <link rel="stylesheet" href="./style.css" />
-  <script type="module" src="./app.js"></script>
 </head>
 <body>
-  <div class="demo-page">
-    <header class="demo-header">
-      <div><p class="eyebrow">Qadam storefront</p><a class="brand" href="../">Qadam Demo</a></div>
-      <a class="ghost-btn" href="../">В меню</a>
+  <div class="site-shell">
+    <header class="site-header">
+      <a class="brand" href="../">Qadam</a>
+      <span class="demo-badge">3D / AR</span>
     </header>
     <main>
-      <div class="demo-intro"><p class="eyebrow">3D и AR</p><h1>Рассмотрите блюдо со всех сторон</h1>
-        <p>Откройте модель, вращайте и приближайте её. На совместимом телефоне можно посмотреть блюдо в AR.</p></div>
-      <article class="dish-card" aria-labelledby="dish-title">
-        <img class="dish-image" src="./assets/preview.webp" alt="Тарелка плова Osh" width="800" height="650" />
-        <div class="dish-body"><h2 id="dish-title">Osh <span>— 50 000 сум</span></h2>
-          <p>Плов с рисом, мясом и морковью.</p>
-          <button id="view-osh" class="ghost-btn osh-view-button" type="button" aria-label="Посмотреть плов в 3D" aria-haspopup="dialog">Посмотреть</button>
-          <p id="viewer-message" role="status" aria-live="polite" hidden></p>
-          <noscript><p>Для интерактивного просмотра включите JavaScript.</p></noscript>
-        </div>
-      </article>
+      <section class="catalog-intro" aria-labelledby="catalog-title">
+        <p class="eyebrow">Демонстрационный каталог</p>
+        <h1 id="catalog-title">Qadam 3D / AR Demo</h1>
+        <p>Посмотрите, как блюда могут выглядеть в цифровом меню и прямо на столе гостя.</p>
+      </section>
+      <section class="catalog-grid" aria-label="Доступные 3D-модели">
+        <article class="dish-card">
+          <a class="dish-preview-link" href="./plov/" aria-label="Открыть Demo Plov">
+            <img class="dish-image" src="./assets/preview.webp" alt="Тарелка плова" width="800" height="650" />
+          </a>
+          <div class="dish-body">
+            <p class="dish-label">Доступно в 3D и AR</p>
+            <h2>Demo Plov</h2>
+            <p>Посмотреть блюдо в 3D и на своём столе</p>
+            <a class="primary-button" href="./plov/">Посмотреть</a>
+          </div>
+        </article>
+      </section>
     </main>
+    <footer class="site-footer">Qadam · цифровое меню для ресторанов</footer>
   </div>
 </body>
 </html>
