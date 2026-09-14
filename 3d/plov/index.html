@@ -6,8 +6,9 @@
   <meta name="description" content="Demo Plov — посмотрите блюдо в 3D и дополненной реальности." />
   <title>Demo Plov · Qadam 3D / AR</title>
   <link rel="icon" href="../../assets/favicon.png" type="image/png" />
+  <link rel="preload" as="image" href="../assets/preview.webp" fetchpriority="high" />
   <link rel="stylesheet" href="../style.css" />
-  <script type="module" src="./app.js"></script>
+  <script type="module" src="./app.js?v=2"></script>
 </head>
 <body>
   <div class="site-shell model-page">
@@ -23,7 +24,7 @@
       </header>
       <section class="viewer-card" aria-label="Интерактивная модель Demo Plov">
         <div id="model-stage" class="model-stage">
-          <img class="model-poster" src="../assets/preview.webp" alt="Тарелка плова" width="800" height="650" />
+          <img class="model-poster" src="../assets/preview.webp" alt="Тарелка плова" width="800" height="650" decoding="async" fetchpriority="high" />
         </div>
         <div class="viewer-details">
           <div>
