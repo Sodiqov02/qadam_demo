@@ -3,11 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="Demo Fruits — посмотрите композицию в 3D и дополненной реальности." />
-  <title>Demo Fruits · Qadam 3D / AR</title>
+  <meta name="description" content="Фруктовая тарелка — посмотрите композицию в 3D и дополненной реальности." />
+  <title>Фруктовая тарелка · Qadam 3D / AR</title>
   <link rel="icon" href="../../assets/favicon.png" type="image/png" />
+  <link rel="preload" as="image" href="../assets/fruits-preview.webp" fetchpriority="high" />
   <link rel="stylesheet" href="../style.css" />
-  <script type="module" src="./app.js"></script>
+  <script type="module" src="./app.js?v=2"></script>
 </head>
 <body>
   <div class="site-shell model-page">
@@ -18,12 +19,12 @@
     <main>
       <header class="model-heading">
         <p class="eyebrow">Qadam Demo</p>
-        <h1>Demo Fruits</h1>
+        <h1>Фруктовая тарелка</h1>
         <p>Поверните композицию пальцем, приблизьте детали или примерьте её на своём столе.</p>
       </header>
-      <section class="viewer-card" aria-label="Интерактивная модель Demo Fruits">
+      <section class="viewer-card" aria-label="Интерактивная модель фруктовой тарелки">
         <div id="model-stage" class="model-stage">
-          <img class="model-poster" src="../assets/fruits-preview.webp" alt="Фруктовая композиция" width="800" height="650" />
+          <img class="model-poster" src="../assets/fruits-preview.webp" alt="Фруктовая тарелка" width="800" height="650" decoding="async" fetchpriority="high" />
         </div>
         <div class="viewer-details">
           <div>
