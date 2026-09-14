@@ -9,7 +9,7 @@ mountModelViewer({
   retry: document.getElementById('retry-model'),
   debugHost: document.getElementById('debug-host'),
   title: 'Demo Fruits',
-  alt: 'Фотограмметрическая 3D-модель фруктовой композиции',
-  glbUrl: pageUrl('fruits.glb'),
+  alt: '3D-модель фруктовой композиции',
+  glbUrl: pageUrl('fruits-clean-v2.glb'),
   arModes: 'webxr scene-viewer'
 });
