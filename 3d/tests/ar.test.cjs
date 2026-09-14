@@ -23,6 +23,7 @@ async function setup({ supported = true, xr = false, debug = true, webgl = true,
       Object.assign(this, { tag, children: [], attrs: {}, style: {}, loaded: false, canActivateAR: supported });
     }
     setAttribute(key, value) { this.attrs[key] = value; if (key === 'src') this.src = value; }
+    querySelector(selector) { return this.children.find(element => selector === '.model-poster' && element.tag === 'img') || null; }
     getAttribute(key) { return this.attrs[key] ?? null; }
     append(...elements) { for (const element of elements) { this.children.push(element); element.parent = this; } }
     remove() { if (this.parent) this.parent.children = this.parent.children.filter(element => element !== this); }
@@ -39,6 +40,8 @@ async function setup({ supported = true, xr = false, debug = true, webgl = true,
   const windowEvents = new EventTarget();
   windowEvents.isSecureContext = true;
   const stage = new Element('stage');
+  const poster = new Element('img');
+  stage.append(poster);
   const status = new Element('status');
   const reset = new Element('reset');
   const retry = new Element('retry');
@@ -81,7 +84,7 @@ async function setup({ supported = true, xr = false, debug = true, webgl = true,
   await new Promise(resolve => setImmediate(resolve));
 
   return {
-    stage, status, reset, retry, debugHost, intervals,
+    stage, poster, status, reset, retry, debugHost, intervals,
     viewer: () => viewer,
     arButton: () => viewer.children.find(element => element.slot === 'ar-button'),
     count: () => activations,
@@ -160,18 +163,18 @@ test('catalog stays lightweight and routes to both model pages', () => {
   assert.match(catalogHtml, /href="\.\/plov\/"/);
   assert.match(catalogHtml, /href="\.\/fruits\/"/);
   assert.match(catalogHtml, /src="\.\/assets\/preview\.webp"/);
-  assert.match(catalogHtml, /src="\.\/assets\/fruits-preview\.webp"/);
+  assert.match(catalogHtml, /src="\.\/assets\/fruits-clean-v2-preview\.webp"/);
   assert.doesNotMatch(catalogHtml, /\.glb|\.usdz|model-viewer/i);
-  assert.match(plovHtml, /src="\.\/app\.js"/);
+  assert.match(plovHtml, /src="\.\/app\.js\?v=[^" ]+"/);
   assert.match(plovHtml, /src="\.\.\/assets\/preview\.webp"/);
   assert.equal(new URL('../assets/osh.glb', 'https://sodiqov02.github.io/qadam_demo/3d/plov/app.js').href,
     'https://sodiqov02.github.io/qadam_demo/3d/assets/osh.glb');
-  assert.match(fruitsHtml, /src="\.\.\/assets\/fruits-preview\.webp"/);
-  assert.match(fruitsApp, /pageUrl\('fruits\.glb'\)/);
+  assert.match(fruitsHtml, /src="\.\.\/assets\/fruits-clean-v2-preview\.webp"/);
+  assert.match(fruitsApp, /pageUrl\('fruits-clean-v2\.glb'\)/);
   assert.match(fruitsApp, /arModes: 'webxr scene-viewer'/);
   assert.doesNotMatch(fruitsApp, /usdz|quick-look/i);
-  assert.equal(new URL('../assets/fruits.glb', 'https://sodiqov02.github.io/qadam_demo/3d/fruits/app.js').href,
-    'https://sodiqov02.github.io/qadam_demo/3d/assets/fruits.glb');
+  assert.equal(new URL('../assets/fruits-clean-v2.glb', 'https://sodiqov02.github.io/qadam_demo/3d/fruits/app.js').href,
+    'https://sodiqov02.github.io/qadam_demo/3d/assets/fruits-clean-v2.glb');
 });
 
 test('homepage promotes both models with project-relative localized links', () => {
@@ -184,4 +187,21 @@ test('homepage promotes both models with project-relative localized links', () =
   assert.match(homepageScript, /arShowcaseTitle: "Посмотрите блюдо на своём столе"/);
   assert.match(homepageScript, /arShowcaseTitle: "See the dish on your table"/);
   assert.equal((homepageScript.match(/arShowcaseCta:/g) || []).length, 3);
+});
+
+test('poster stays visible during loading and returns after error and retry', async () => {
+  const page = await setup();
+  assert.equal(page.poster.hidden, false);
+  assert.equal(page.reset.disabled, true);
+  page.load();
+  assert.equal(page.poster.hidden, true);
+  assert.equal(page.reset.disabled, false);
+  page.viewer().dispatchEvent(new Event('error'));
+  assert.equal(page.poster.hidden, false);
+  assert.equal(page.retry.hidden, false);
+  page.click(page.retry);
+  await new Promise(resolve => setImmediate(resolve));
+  assert.equal(page.poster.hidden, false);
+  page.load();
+  assert.equal(page.poster.hidden, true);
 });

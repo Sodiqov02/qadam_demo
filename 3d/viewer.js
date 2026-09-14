@@ -14,6 +14,7 @@ function loadViewer() {
 export function mountModelViewer({ stage, status, reset, retry, debugHost, title, alt, glbUrl, usdzUrl = null, arModes }) {
   if (!stage || !status || !reset || !retry) throw new Error('Missing model viewer mount element');
   const configuredArModes = arModes || (usdzUrl ? 'webxr scene-viewer quick-look' : 'webxr scene-viewer');
+  const poster = stage.querySelector('.model-poster');
 
   let viewer, loadTimer, capabilityTimer, attempt = 0;
   const diagnostics = {
@@ -113,6 +114,7 @@ export function mountModelViewer({ stage, status, reset, retry, debugHost, title
     clearTimeout(loadTimer);
     clearInterval(capabilityTimer);
     viewer?.remove();
+    if (poster) poster.hidden = false;
     diagnostics.loaded = false;
     diagnostics.canActivateAR = false;
     diagnostics.lastARError = null;
@@ -140,6 +142,7 @@ export function mountModelViewer({ stage, status, reset, retry, debugHost, title
       console.error('[Qadam 3D] error', diagnostics.loadError, error);
       renderDebug();
       viewer?.remove();
+      if (poster) poster.hidden = false;
       reset.disabled = true;
       status.textContent = 'Не удалось загрузить 3D. Изображение блюда доступно; попробуйте ещё раз.';
       retry.hidden = false;
@@ -237,7 +240,9 @@ export function mountModelViewer({ stage, status, reset, retry, debugHost, title
         if (diagnostics.loaded && !diagnostics.lastARError && diagnostics.arStatus === 'not-presenting') {
           const message = viewer.canActivateAR
             ? 'Модель готова. Можно посмотреть её на своём столе.'
-            : 'Модель готова. AR доступен на совместимых смартфонах.';
+            : usdzUrl
+              ? 'Модель готова. AR доступен на совместимых смартфонах.'
+              : 'Модель готова. AR доступен на совместимых Android-смартфонах; на iPhone — просмотр в 3D.';
           if (status.textContent !== message) status.textContent = message;
         }
         if (changed) console.info('[Qadam AR] capabilities', { ...diagnostics });
@@ -249,6 +254,7 @@ export function mountModelViewer({ stage, status, reset, retry, debugHost, title
         clearTimeout(loadTimer);
         reset.disabled = false;
         diagnostics.loaded = true;
+        if (poster) poster.hidden = true;
         refreshCapabilities();
         console.info('[Qadam 3D] load', { ...diagnostics });
       });

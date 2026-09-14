@@ -28,13 +28,15 @@ After publishing the repository root with GitHub Pages:
     preview.webp
     osh.glb
     osh.usdz
-    fruits-preview.webp
-    fruits.glb
+    fruits-clean-v2-preview.webp
+    fruits-clean-v2.glb               public Fruits model (1,120,840 bytes)
+    fruits.glb                        archived source; not loaded by demo
   vendor/
     model-viewer-4.3.1.min.js
     model-viewer-LICENSE.txt
   tests/
     ar.test.cjs
+    assets.test.cjs
 ```
 
 All browser paths are relative so the project keeps the `/qadam_demo/` GitHub
@@ -85,7 +87,7 @@ node --check 3d/viewer.js
 node --check 3d/plov/app.js
 node --check 3d/fruits/app.js
 node --check 3d/vendor/model-viewer-4.3.1.min.js
-node --test 3d/tests/ar.test.cjs
+node --test 3d/tests/*.test.cjs
 git diff --check
 ```
 
@@ -98,3 +100,13 @@ python -m http.server 8000
 Open `http://localhost:8000/3d/`, `http://localhost:8000/3d/plov/` and
 `http://localhost:8000/3d/fruits/`. Native AR still requires a compatible phone
 and HTTPS; validate it again after publishing.
+
+The HTML image remains above the viewer until its load event and returns on
+error/retry. Catalog images reserve a responsive aspect ratio; only the first
+preview has high priority, while the second is lazy. Previews are 24/22 KB;
+the 1.07 MB viewer library is imported only on dish pages.
+
+When changing CSS, app entry points or the shared viewer, update the stable
+`?v=` release token in all three HTML files and both app imports. Keep the
+pinned vendor URL and unchanged image/model URLs cacheable. GitHub Pages
+controls HTML cache headers; clients must navigate/reload to receive a release.
