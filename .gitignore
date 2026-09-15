@@ -1,0 +1,6 @@
+.unlazy/
+3d/review/
+3d/review-realism/
+3d/*-preview.html
+3d/**/__pycache__/
+*.pyc

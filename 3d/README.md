@@ -42,9 +42,6 @@ After publishing the repository root with GitHub Pages:
   tools/fruits-realism/
     build.py                            deterministic geometry/PBR export pipeline
     skin-atlas.png                      source albedo atlas
-  review-realism/
-    before-clean-v2.webp                comparable previous-model render
-    after-real-v1.webp                  comparable production-model render
 ```
 
 All browser paths are relative so the project keeps the `/qadam_demo/` GitHub
