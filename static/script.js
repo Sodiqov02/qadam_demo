@@ -442,7 +442,16 @@
   let menuCategories = [];
   let activeCategoryId = "all";
   let toastTimer = 0;
-  let currentLang = localStorage.getItem("qadamLang") || "uz";
+
+  function readStoredLanguage() {
+    try { return window.localStorage.getItem("qadamLang"); } catch (_) { return null; }
+  }
+
+  function storeLanguage(language) {
+    try { window.localStorage.setItem("qadamLang", language); } catch (_) { /* privacy mode */ }
+  }
+
+  let currentLang = readStoredLanguage() || "uz";
   if (!translations[currentLang]) {
     currentLang = "uz";
   }
@@ -470,7 +479,7 @@
 
   function applyLanguage(lang) {
     currentLang = translations[lang] ? lang : "uz";
-    localStorage.setItem("qadamLang", currentLang);
+    storeLanguage(currentLang);
     document.documentElement.lang = currentLang;
 
     document.querySelectorAll("[data-i18n]").forEach((el) => {
@@ -537,6 +546,21 @@
       });
     }
     return [];
+  }
+
+  function validateMenuItems(items) {
+    const seen = new Set();
+    return items.filter((item) => {
+      if (!item || typeof item !== "object" || Array.isArray(item)) return false;
+      const id = typeof item.id === "string" ? item.id.trim() : "";
+      const name = typeof item.name === "string" ? item.name.trim() : "";
+      const category = typeof item.category === "string" ? item.category.trim() : "";
+      const price = Number(item.price);
+      if (!id || !name || !category || !Number.isFinite(price) || price < 0) return false;
+      if (seen.has(id)) throw new Error(`Duplicate menu item id: ${id}`);
+      seen.add(id);
+      return true;
+    });
   }
 
   function buildCategories(items) {
@@ -1186,7 +1210,7 @@
       throw new Error(t("menuLoadError"));
     }
     const data = await res.json();
-    menuCategories = buildCategories(normalizeMenuItems(data));
+    menuCategories = buildCategories(validateMenuItems(normalizeMenuItems(data)));
     if (activeCategoryId !== "all" && !menuCategories.some((cat) => String(cat.id) === activeCategoryId)) {
       activeCategoryId = "all";
     }
@@ -1203,20 +1227,6 @@
     }
     setSubmitState(true);
     try {
-      const form = new FormData(orderForm);
-      const demoOrder = {
-        items: Array.from(cart.values()).map(({ item, qty }) => ({ item_id: item.id, qty })),
-        customer: {
-          name: (form.get("name") || "").trim(),
-          phone: (form.get("phone") || "").trim(),
-          address: (form.get("address") || "").trim(),
-          comment: (form.get("comment") || "-").trim() || "-",
-        },
-        source: "site",
-      };
-      window.setTimeout(function () {
-        console.info("Qadam demo order", demoOrder);
-      }, 0);
       setStatus(t("successStatus"), "is-success");
       showCartToast(t("toastSuccess"));
       clearCart();
