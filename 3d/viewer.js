@@ -11,7 +11,7 @@ function loadViewer() {
   return library;
 }
 
-export function mountModelViewer({ stage, status, reset, retry, debugHost, title, alt, glbUrl, usdzUrl = null, arModes }) {
+export function mountModelViewer({ stage, status, reset, retry, debugHost, title, alt, glbUrl, usdzUrl = null, arModes, cameraOrbit = '25deg 45deg auto', exposure = 0.85, shadowIntensity = 0.5, shadowSoftness = 1 }) {
   if (!stage || !status || !reset || !retry) throw new Error('Missing model viewer mount element');
   const configuredArModes = arModes || (usdzUrl ? 'webxr scene-viewer quick-look' : 'webxr scene-viewer');
   const poster = stage.querySelector('.model-poster');
@@ -103,7 +103,7 @@ export function mountModelViewer({ stage, status, reset, retry, debugHost, title
 
   reset.addEventListener('click', () => {
     if (!viewer) return;
-    viewer.cameraOrbit = '25deg 45deg auto';
+    viewer.cameraOrbit = cameraOrbit;
     viewer.cameraTarget = 'auto auto auto';
     viewer.fieldOfView = '30deg';
     viewer.jumpCameraToGoal();
@@ -168,12 +168,13 @@ export function mountModelViewer({ stage, status, reset, retry, debugHost, title
         alt,
         'camera-controls': '',
         'disable-pan': '',
-        'camera-orbit': '25deg 45deg auto',
+        'camera-orbit': cameraOrbit,
         'min-camera-orbit': 'auto 0deg 60%',
         'max-camera-orbit': 'auto 90deg 200%',
         'touch-action': 'none',
-        'shadow-intensity': '0.5',
-        exposure: '0.85',
+        'shadow-intensity': String(shadowIntensity),
+        'shadow-softness': String(shadowSoftness),
+        exposure: String(exposure),
         'environment-image': 'neutral',
         'interaction-prompt': 'auto',
         ar: '',

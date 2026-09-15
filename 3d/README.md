@@ -28,8 +28,10 @@ After publishing the repository root with GitHub Pages:
     preview.webp
     osh.glb
     osh.usdz
-    fruits-clean-v2-preview.webp
-    fruits-clean-v2.glb               public Fruits model (1,120,840 bytes)
+    fruits-real-v1-preview.webp        catalog image rendered from production model
+    fruits-real-v1-poster.webp         loading poster rendered from production model
+    fruits-real-v1.glb                 public Fruits model (about 7 MB)
+    fruits-clean-v2.glb                previous lightweight model
     fruits.glb                        archived source; not loaded by demo
   vendor/
     model-viewer-4.3.1.min.js
@@ -37,6 +39,12 @@ After publishing the repository root with GitHub Pages:
   tests/
     ar.test.cjs
     assets.test.cjs
+  tools/fruits-realism/
+    build.py                            deterministic geometry/PBR export pipeline
+    skin-atlas.png                      source albedo atlas
+  review-realism/
+    before-clean-v2.webp                comparable previous-model render
+    after-real-v1.webp                  comparable production-model render
 ```
 
 All browser paths are relative so the project keeps the `/qadam_demo/` GitHub
@@ -101,10 +109,28 @@ Open `http://localhost:8000/3d/`, `http://localhost:8000/3d/plov/` and
 `http://localhost:8000/3d/fruits/`. Native AR still requires a compatible phone
 and HTTPS; validate it again after publishing.
 
-The HTML image remains above the viewer until its load event and returns on
+The HTML poster remains above the viewer until its load event and returns on
 error/retry. Catalog images reserve a responsive aspect ratio; only the first
-preview has high priority, while the second is lazy. Previews are 24/22 KB;
+preview has high priority, while the second is lazy. Previews are 24/35 KB;
 the 1.07 MB viewer library is imported only on dish pages.
+
+## Fruits production asset
+
+`fruits-real-v1.glb` replaces the flat-color clean model. It uses separately
+sculpted apple, citrus, peach and pomegranate silhouettes; an open pomegranate
+calyx; an irregular 23-berry grape bunch with branching stems; leaves with
+central veins; and a shallow porcelain plate with a rolled lip and foot ring.
+Five fruit-skin materials embed albedo, micro-normal and varying-roughness maps.
+The catalog preview and loading poster are renders of this exact GLB.
+
+The asset can be rebuilt with Python 3, NumPy and Pillow:
+
+```sh
+python 3d/tools/fruits-realism/build.py
+```
+
+The committed GLB and web images are production artifacts, so the website has
+no Python or image-generation dependency at runtime.
 
 When changing CSS, app entry points or the shared viewer, update the stable
 `?v=` release token in all three HTML files and both app imports. Keep the

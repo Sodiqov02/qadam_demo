@@ -16,18 +16,30 @@ function config(dish) {
   return result;
 }
 
-test('G1/G2: actual Fruits configuration and measured binary', () => {
-  assert.equal(config('fruits').glbUrl, `${base}assets/fruits-clean-v2.glb`);
-  assert.doesNotMatch(read('fruits/app.js') + read('fruits/index.html'), /fruits(?:-clean)?\.glb/);
-  const binary = fs.readFileSync(path.join(root, '3d/assets/fruits-clean-v2.glb'));
+test('G1/G2: actual Fruits configuration and measured realistic binary', () => {
+  assert.equal(config('fruits').glbUrl, `${base}assets/fruits-real-v1.glb`);
+  assert.doesNotMatch(read('fruits/app.js') + read('fruits/index.html'), /fruits(?:-clean(?:-v2)?)?\.glb/);
+  const binary = fs.readFileSync(path.join(root, '3d/assets/fruits-real-v1.glb'));
   const oldSize = fs.statSync(path.join(root, '3d/assets/fruits.glb')).size;
-  assert.ok(binary.length > 800000 && binary.length < 1500000);
-  assert.ok(binary.length < oldSize / 5);
+  assert.ok(binary.length >= 1500000 && binary.length <= 8000000);
+  assert.ok(binary.length < oldSize);
   assert.equal(binary.toString('ascii', 0, 4), 'glTF');
   assert.equal(binary.readUInt32LE(4), 2);
   assert.equal(binary.readUInt32LE(8), binary.length);
   const gltf = JSON.parse(binary.toString('utf8', 20, 20 + binary.readUInt32LE(12)));
-  assert.ok(gltf.meshes.length > 0);
+  const meshNames = gltf.meshes.map(mesh => mesh.name);
+  for (const name of ['Gala apple', 'Navel orange', 'Blushed peach front', 'Ruby pomegranate', 'Pomegranate open six-point crown', 'Porcelain plate - rolled lip and foot']) {
+    assert.ok(meshNames.includes(name), name);
+  }
+  const skinMaterials = gltf.materials.filter(material => /skin$/.test(material.name));
+  assert.ok(skinMaterials.length >= 5);
+  for (const material of skinMaterials) {
+    assert.ok(material.pbrMetallicRoughness.baseColorTexture, material.name);
+    assert.ok(material.pbrMetallicRoughness.metallicRoughnessTexture, material.name);
+    assert.ok(material.normalTexture, material.name);
+    assert.equal(material.pbrMetallicRoughness.metallicFactor, 0);
+  }
+  assert.ok(gltf.meshes.filter(mesh => /^Grape \d/.test(mesh.name)).length >= 20);
   console.log(`Fruits: ${binary.length} bytes; archive: ${oldSize} bytes`);
 });
 
@@ -45,9 +57,10 @@ test('G3/G4: lightweight catalog and sized, scheduled previews', () => {
   assert.match(images[1], /loading="lazy"/);
   assert.match(read('style.css'), /\.dish-image\s*\{[^}]*height: auto;[^}]*aspect-ratio:/);
   assert.match(read('style.css'), /\.model-poster\s*\{[^}]*z-index: 1/);
-  for (const file of ['preview.webp', 'fruits-clean-v2-preview.webp']) {
-    assert.ok(fs.statSync(path.join(root, '3d/assets', file)).size < 50000);
-  }
+  assert.ok(fs.statSync(path.join(root, '3d/assets/preview.webp')).size < 50000);
+  assert.ok(fs.statSync(path.join(root, '3d/assets/fruits-real-v1-preview.webp')).size < 50000);
+  assert.ok(fs.statSync(path.join(root, '3d/assets/fruits-real-v1-poster.webp')).size < 100000);
+  assert.match(read('fruits/index.html'), /fruits-real-v1-poster\.webp[^>]+width="1200" height="900"/);
 });
 
 test('G5/G9: versioned entry chain and real paths under GitHub Pages prefix', () => {

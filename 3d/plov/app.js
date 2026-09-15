@@ -1,4 +1,4 @@
-import { mountModelViewer } from '../viewer.js?v=20260914-1';
+import { mountModelViewer } from '../viewer.js?v=20260915-1';
 
 const pageUrl = name => new URL(`../assets/${name}`, import.meta.url).href;
 

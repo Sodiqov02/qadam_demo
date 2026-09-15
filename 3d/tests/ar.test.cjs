@@ -163,18 +163,18 @@ test('catalog stays lightweight and routes to both model pages', () => {
   assert.match(catalogHtml, /href="\.\/plov\/"/);
   assert.match(catalogHtml, /href="\.\/fruits\/"/);
   assert.match(catalogHtml, /src="\.\/assets\/preview\.webp"/);
-  assert.match(catalogHtml, /src="\.\/assets\/fruits-clean-v2-preview\.webp"/);
+  assert.match(catalogHtml, /src="\.\/assets\/fruits-real-v1-preview\.webp"/);
   assert.doesNotMatch(catalogHtml, /\.glb|\.usdz|model-viewer/i);
   assert.match(plovHtml, /src="\.\/app\.js\?v=[^" ]+"/);
   assert.match(plovHtml, /src="\.\.\/assets\/preview\.webp"/);
   assert.equal(new URL('../assets/osh.glb', 'https://sodiqov02.github.io/qadam_demo/3d/plov/app.js').href,
     'https://sodiqov02.github.io/qadam_demo/3d/assets/osh.glb');
-  assert.match(fruitsHtml, /src="\.\.\/assets\/fruits-clean-v2-preview\.webp"/);
-  assert.match(fruitsApp, /pageUrl\('fruits-clean-v2\.glb'\)/);
+  assert.match(fruitsHtml, /src="\.\.\/assets\/fruits-real-v1-poster\.webp"/);
+  assert.match(fruitsApp, /pageUrl\('fruits-real-v1\.glb'\)/);
   assert.match(fruitsApp, /arModes: 'webxr scene-viewer'/);
   assert.doesNotMatch(fruitsApp, /usdz|quick-look/i);
-  assert.equal(new URL('../assets/fruits-clean-v2.glb', 'https://sodiqov02.github.io/qadam_demo/3d/fruits/app.js').href,
-    'https://sodiqov02.github.io/qadam_demo/3d/assets/fruits-clean-v2.glb');
+  assert.equal(new URL('../assets/fruits-real-v1.glb', 'https://sodiqov02.github.io/qadam_demo/3d/fruits/app.js').href,
+    'https://sodiqov02.github.io/qadam_demo/3d/assets/fruits-real-v1.glb');
 });
 
 test('homepage promotes both models with project-relative localized links', () => {
