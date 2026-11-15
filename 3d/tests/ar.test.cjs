@@ -13,7 +13,7 @@ const homepageHtml = fs.readFileSync(path.join(__dirname, '../../index.html'), '
 const homepageScript = fs.readFileSync(path.join(__dirname, '../../static/script.js'), 'utf8');
 const descendants = element => element.children.flatMap(child => [child, ...descendants(child)]);
 
-async function setup({ supported = true, xr = false, debug = true, webgl = true, usdz = true } = {}) {
+async function setup({ supported = true, xr = false, debug = true, webgl = true, usdz = true, ios = false } = {}) {
   const intervals = new Set();
   let viewer, activations = 0, inClick = false, copied = '';
 
@@ -56,7 +56,7 @@ async function setup({ supported = true, xr = false, debug = true, webgl = true,
       removeEventListener: (...args) => documentEvents.removeEventListener(...args)
     },
     navigator: {
-      userAgent: 'Mozilla/5.0 (Linux; Android 14) Chrome/140 Mobile',
+      userAgent: ios ? 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X)' : 'Mozilla/5.0 (Linux; Android 14) Chrome/140 Mobile',
       platform: 'Linux armv8l',
       clipboard: { writeText: async text => { copied = text; } },
       ...(xr ? { xr: { isSessionSupported: async () => true } } : {})
@@ -72,13 +72,14 @@ async function setup({ supported = true, xr = false, debug = true, webgl = true,
   };
   vm.createContext(context);
   const executable = viewerSource
+    .replaceAll('import.meta.url', JSON.stringify('https://sodiqov02.github.io/qadam_demo/3d/viewer.js'))
     .replace('export function mountModelViewer', 'function mountModelViewer')
     .replace("import('./vendor/model-viewer-4.3.1.min.js')", 'Promise.resolve()');
   vm.runInContext(executable, context);
   context.mountModelViewer({
     stage, arHost, status, reset, retry, debugHost,
     title: 'Demo Plov', alt: 'Plov model',
-    glbUrl: 'https://sodiqov02.github.io/qadam_demo/3d/assets/osh.glb',
+    glbUrl: 'https://sodiqov02.github.io/qadam_demo/3d/assets/osh-fast.glb',
     usdzUrl: usdz ? 'https://sodiqov02.github.io/qadam_demo/3d/assets/osh.usdz' : null,
     arModes: usdz ? 'webxr scene-viewer quick-look' : 'webxr scene-viewer'
   });
@@ -101,7 +102,7 @@ for (const xr of [false, true]) test(`AR activation with navigator.xr=${xr}`, as
   const ar = page.arButton();
   assert.equal(page.count(), 0);
   assert.equal(ar.disabled, true);
-  assert.equal(viewer.src, 'https://sodiqov02.github.io/qadam_demo/3d/assets/osh.glb');
+  assert.equal(viewer.src, 'https://sodiqov02.github.io/qadam_demo/3d/assets/osh-fast.glb');
   assert.equal(viewer.attrs['ios-src'], 'https://sodiqov02.github.io/qadam_demo/3d/assets/osh.usdz');
   assert.equal(viewer.attrs.ar, '');
   assert.equal(viewer.attrs['ar-modes'], 'webxr scene-viewer quick-look');
@@ -161,26 +162,26 @@ test('model without USDZ keeps Android AR and disables Quick Look', async () => 
 });
 
 test('catalog stays lightweight and routes to both model pages', () => {
-  assert.match(catalogHtml, /href="\.\/plov\/\?v=20261115-ar3"/);
-  assert.match(catalogHtml, /href="\.\/fruits\/\?v=20261115-ar3"/);
+  assert.match(catalogHtml, /href="\.\/plov\/\?v=20261115-fast1"/);
+  assert.match(catalogHtml, /href="\.\/fruits\/\?v=20261115-fast1"/);
   assert.match(catalogHtml, /src="\.\/assets\/plov-menu-v2\.webp"/);
   assert.match(catalogHtml, /src="\.\/assets\/fruits-menu-v2\.webp"/);
   assert.doesNotMatch(catalogHtml, /\.glb|\.usdz|model-viewer/i);
   assert.match(plovHtml, /src="\.\/app\.js\?v=[^" ]+"/);
   assert.match(plovHtml, /src="\.\.\/assets\/plov-menu-v2\.webp"/);
-  assert.equal(new URL('../assets/osh.glb', 'https://sodiqov02.github.io/qadam_demo/3d/plov/app.js').href,
-    'https://sodiqov02.github.io/qadam_demo/3d/assets/osh.glb');
+  assert.equal(new URL('../assets/osh-fast.glb', 'https://sodiqov02.github.io/qadam_demo/3d/plov/app.js').href,
+    'https://sodiqov02.github.io/qadam_demo/3d/assets/osh-fast.glb');
   assert.match(fruitsHtml, /src="\.\.\/assets\/fruits-menu-v2\.webp"/);
-  assert.match(fruitsApp, /pageUrl\('fruits-real-v1\.glb'\)/);
+  assert.match(fruitsApp, /pageUrl\('fruits-real-v1-fast\.glb'\)/);
   assert.match(fruitsApp, /arModes: 'webxr scene-viewer quick-look'/);
-  assert.match(fruitsApp, /usdzUrl: pageUrl\('fruits\.usdz'\)/);
-  assert.equal(new URL('../assets/fruits-real-v1.glb', 'https://sodiqov02.github.io/qadam_demo/3d/fruits/app.js').href,
-    'https://sodiqov02.github.io/qadam_demo/3d/assets/fruits-real-v1.glb');
+  assert.match(fruitsApp, /usdzUrl: pageUrl\('fruits-fast\.usdz'\)/);
+  assert.equal(new URL('../assets/fruits-real-v1-fast.glb', 'https://sodiqov02.github.io/qadam_demo/3d/fruits/app.js').href,
+    'https://sodiqov02.github.io/qadam_demo/3d/assets/fruits-real-v1-fast.glb');
 });
 
 test('homepage promotes both models with project-relative localized links', () => {
-  assert.match(homepageHtml, /href="\.\/3d\/plov\/\?v=20261115-ar3"/);
-  assert.match(homepageHtml, /href="\.\/3d\/fruits\/\?v=20261115-ar3"/);
+  assert.match(homepageHtml, /href="\.\/3d\/plov\/\?v=20261115-fast1"/);
+  assert.match(homepageHtml, /href="\.\/3d\/fruits\/\?v=20261115-fast1"/);
   assert.match(homepageHtml, /src="\.\/3d\/assets\/plov-menu-v2\.webp"/);
   assert.match(homepageHtml, /src="\.\/3d\/assets\/fruits-menu-v2\.webp"/);
   assert.doesNotMatch(homepageHtml, /href="\/3d\//);
@@ -222,7 +223,34 @@ test('viewer CSP allows embedded texture fetches and internal shadow styles', ()
     const policy = html.match(/http-equiv="Content-Security-Policy" content="([^"]+)"/)[1];
     assert.match(policy, /connect-src 'self' blob:/);
     assert.match(policy, /style-src 'self' 'unsafe-inline'/);
-    assert.match(policy, /script-src 'self';/);
+    assert.match(policy, /script-src 'self' 'wasm-unsafe-eval';/);
     assert.match(html, /id="ar-actions"/);
   }
+});
+
+test('iPhone native Quick Look is available without WebGL or waiting for GLB', async () => {
+  const page = await setup({ ios: true, webgl: false });
+  const link = page.arHost.children.find(el => el.tag === 'a');
+  assert.ok(link);
+  assert.equal(link.attrs.rel, 'ar');
+  assert.equal(link.attrs.href, 'https://sodiqov02.github.io/qadam_demo/3d/assets/osh.usdz');
+  assert.equal(link.children[0].tag, 'img');
+  assert.equal(link.disabled, undefined);
+  assert.equal(page.retry.hidden, false);
+  page.click(page.retry);
+  await new Promise(resolve => setImmediate(resolve));
+  assert.equal(page.arHost.children.filter(el => el.tag === 'a').length, 1);
+});
+
+test('retry reuses stable model URL and progress never announces ready before load', async () => {
+  const page = await setup();
+  const url = page.viewer().src;
+  const event = new Event('progress'); event.detail = { totalProgress: 1 };
+  page.viewer().dispatchEvent(event);
+  assert.match(page.status.textContent, /99%/);
+  assert.equal(page.poster.hidden, false);
+  page.viewer().dispatchEvent(new Event('error'));
+  page.click(page.retry);
+  await new Promise(resolve => setImmediate(resolve));
+  assert.equal(page.viewer().src, url);
 });

@@ -1,4 +1,4 @@
-import { mountModelViewer } from '../viewer.js?v=20261115-ar3';
+import { mountModelViewer } from '../viewer.js?v=20261115-fast1';
 
 const pageUrl = name => new URL(`../assets/${name}`, import.meta.url).href;
 
@@ -11,8 +11,8 @@ mountModelViewer({
   debugHost: document.getElementById('debug-host'),
   title: 'Фруктовая тарелка',
   alt: '3D-модель фруктовой композиции',
-  glbUrl: pageUrl('fruits-real-v1.glb'),
-  usdzUrl: pageUrl('fruits.usdz'),
+  glbUrl: pageUrl('fruits-real-v1-fast.glb'),
+  usdzUrl: pageUrl('fruits-fast.usdz'),
   arModes: 'webxr scene-viewer quick-look',
   cameraOrbit: '25deg 45deg auto',
   exposure: 0.95,

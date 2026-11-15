@@ -1,9 +1,24 @@
 let library;
-let modelRetry = 0;
+// Registration is bounded; loading still works when persistent storage is unavailable.
+async function prepareCache() {
+  if (!('serviceWorker' in navigator)) return;
+  try {
+    await Promise.race([
+      (async () => {
+        await navigator.serviceWorker.register(new URL('./sw.js', import.meta.url), { scope: new URL('./', import.meta.url).pathname });
+        await navigator.serviceWorker.ready;
+        if (!navigator.serviceWorker.controller) await new Promise(resolve => navigator.serviceWorker.addEventListener('controllerchange', resolve, { once: true }));
+      })(),
+      new Promise(resolve => setTimeout(resolve, 1500))
+    ]);
+  } catch (_) { /* Online loading is the fallback. */ }
+}
 
 function loadViewer() {
   if (!library) {
-    library = import('./vendor/model-viewer-4.3.1.min.js').catch(error => {
+    library = import('./vendor/model-viewer-4.3.1.min.js').then(() => {
+      customElements.get('model-viewer').meshoptDecoderLocation = new URL('./vendor/meshopt_decoder.js', import.meta.url).href;
+    }).catch(error => {
       library = null;
       throw error;
     });
@@ -43,6 +58,23 @@ export function mountModelViewer({ stage, arHost = stage, status, reset, retry, 
     visibilityChangesAfterARAttempt: []
   };
   diagnostics.deviceType = diagnostics.android ? 'android' : diagnostics.ios ? 'ios' : 'desktop';
+
+  // Native Quick Look must remain usable before GLB, decoder or WebGL is ready.
+  let quickLook;
+  if (diagnostics.ios && usdzUrl) {
+    quickLook = document.createElement('a');
+    quickLook.setAttribute('rel', 'ar');
+    quickLook.setAttribute('href', usdzUrl);
+    quickLook.className = 'primary-button model-ar-button';
+    const image = document.createElement('img');
+    image.src = poster?.src || '';
+    image.alt = '';
+    image.style.display = 'none';
+    const label = document.createElement('span');
+    label.textContent = 'Посмотреть на своём столе';
+    quickLook.append(image, label);
+    arHost.append(quickLook);
+  }
 
   let debug, copyDiagnostics;
   if (debugHost && new URLSearchParams(location.search).get('ar-debug') === '1') {
@@ -134,7 +166,6 @@ export function mountModelViewer({ stage, arHost = stage, status, reset, retry, 
     const fail = error => {
       if (current !== attempt) return;
       attempt++;
-      modelRetry++;
       clearTimeout(loadTimer);
       clearInterval(capabilityTimer);
       diagnostics.loaded = false;
@@ -157,14 +188,13 @@ export function mountModelViewer({ stage, arHost = stage, status, reset, retry, 
       diagnostics.webgl2 = !!gl;
       if (!gl) throw new Error('WebGL unavailable');
       gl.getExtension('WEBGL_lose_context')?.loseContext();
-      await loadViewer();
+      await Promise.all([prepareCache(), loadViewer()]);
       diagnostics.modelViewerRegistered = !!customElements.get('model-viewer');
       if (!diagnostics.modelViewerRegistered) throw new Error('model-viewer was not registered');
       if (current !== attempt) return;
 
       viewer = document.createElement('model-viewer');
       const modelUrl = new URL(glbUrl);
-      if (modelRetry) modelUrl.searchParams.set('retry', String(modelRetry));
       const attrs = {
         src: modelUrl.href,
         alt,
@@ -232,7 +262,7 @@ export function mountModelViewer({ stage, arHost = stage, status, reset, retry, 
       arSlot.slot = 'ar-button';
       arSlot.hidden = true;
       viewer.append(arSlot);
-      arHost.append(ar);
+      if (!quickLook) arHost.append(ar);
 
       const panTarget = document.createElement('span');
       panTarget.slot = 'pan-target';
@@ -261,6 +291,14 @@ export function mountModelViewer({ stage, arHost = stage, status, reset, retry, 
         renderDebug();
       };
 
+      viewer.addEventListener('progress', event => {
+        if (current !== attempt || diagnostics.loaded) return;
+        const progress = Math.max(0, Math.min(0.99, event.detail.totalProgress));
+        const percent = Math.round(progress * 100);
+        const lang = document.documentElement?.lang || 'ru';
+        const message = lang === 'uz' ? '3D model yuklanmoqda' : lang === 'en' ? 'Loading 3D model' : 'Загрузка 3D-модели';
+        status.textContent = `${message}… ${percent}%`;
+      });
       viewer.addEventListener('load', () => {
         if (current !== attempt) return;
         clearTimeout(loadTimer);

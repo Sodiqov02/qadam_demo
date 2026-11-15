@@ -17,9 +17,9 @@ function config(dish) {
 }
 
 test('G1/G2: actual Fruits configuration and measured realistic binary', () => {
-  assert.equal(config('fruits').glbUrl, `${base}assets/fruits-real-v1.glb`);
+  assert.equal(config('fruits').glbUrl, `${base}assets/fruits-real-v1-fast.glb`);
   assert.doesNotMatch(read('fruits/app.js') + read('fruits/index.html'), /fruits(?:-clean(?:-v2)?)?\.glb/);
-  const binary = fs.readFileSync(path.join(root, '3d/assets/fruits-real-v1.glb'));
+  const binary = fs.readFileSync(path.join(root, '3d/assets/fruits-real-v1-fast.glb'));
   const oldSize = fs.statSync(path.join(root, '3d/assets/fruits.glb')).size;
   assert.ok(binary.length >= 1500000 && binary.length <= 8000000);
   assert.ok(binary.length < oldSize);
@@ -84,9 +84,9 @@ test('G5/G9: versioned entry chain and real paths under GitHub Pages prefix', ()
 });
 
 test('G6/G8: actual Plov sources and Fruits Quick Look modes', () => {
-  assert.equal(config('plov').glbUrl, `${base}assets/osh.glb`);
+  assert.equal(config('plov').glbUrl, `${base}assets/osh-fast.glb`);
   assert.equal(config('plov').usdzUrl, `${base}assets/osh.usdz`);
   assert.equal(config('fruits').arModes, 'webxr scene-viewer quick-look');
-  assert.equal(config('fruits').usdzUrl, `${base}assets/fruits.usdz`);
+  assert.equal(config('fruits').usdzUrl, `${base}assets/fruits-fast.usdz`);
   assert.doesNotMatch(read('fruits/index.html'), /На iPhone — просмотр в 3D/);
 });

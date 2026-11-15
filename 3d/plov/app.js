@@ -1,4 +1,4 @@
-import { mountModelViewer } from '../viewer.js?v=20261115-ar3';
+import { mountModelViewer } from '../viewer.js?v=20261115-fast1';
 
 const pageUrl = name => new URL(`../assets/${name}`, import.meta.url).href;
 
@@ -11,6 +11,6 @@ mountModelViewer({
   debugHost: document.getElementById('debug-host'),
   title: 'Плов',
   alt: 'Фотограмметрическая 3D-модель тарелки плова',
-  glbUrl: pageUrl('osh.glb'),
+  glbUrl: pageUrl('osh-fast.glb'),
   usdzUrl: pageUrl('osh.usdz')
 });
