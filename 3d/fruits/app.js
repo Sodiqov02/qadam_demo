@@ -1,4 +1,4 @@
-import { mountModelViewer } from '../viewer.js?v=20260915-1';
+import { mountModelViewer } from '../viewer.js?v=20261115-ar2';
 
 const pageUrl = name => new URL(`../assets/${name}`, import.meta.url).href;
 
@@ -12,8 +12,8 @@ mountModelViewer({
   alt: '3D-модель фруктовой композиции',
   glbUrl: pageUrl('fruits-real-v1.glb'),
   arModes: 'webxr scene-viewer',
-  cameraOrbit: '25deg 55deg auto',
+  cameraOrbit: '25deg 45deg auto',
   exposure: 0.95,
-  shadowIntensity: 0.85,
-  shadowSoftness: 0.75
+  shadowIntensity: 0.35,
+  shadowSoftness: 1
 });

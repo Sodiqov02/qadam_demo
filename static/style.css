@@ -3267,3 +3267,7 @@ body.public-menu-page .footer-label {
     padding: 14px;
   }
 }
+
+/* Consistent native-model previews on the menu surface. */
+body.public-menu-page .ar-showcase-image { background: #f4f0e7; }
+body.public-menu-page .ar-showcase-image img { object-fit: contain; padding: 12px; object-position: center; }

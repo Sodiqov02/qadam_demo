@@ -1,4 +1,4 @@
-import { mountModelViewer } from '../viewer.js?v=20260915-1';
+import { mountModelViewer } from '../viewer.js?v=20261115-ar2';
 
 const pageUrl = name => new URL(`../assets/${name}`, import.meta.url).href;
 
@@ -8,7 +8,7 @@ mountModelViewer({
   reset: document.getElementById('reset-view'),
   retry: document.getElementById('retry-model'),
   debugHost: document.getElementById('debug-host'),
-  title: 'Demo Plov',
+  title: 'Плов',
   alt: 'Фотограмметрическая 3D-модель тарелки плова',
   glbUrl: pageUrl('osh.glb'),
   usdzUrl: pageUrl('osh.usdz')

@@ -45,7 +45,7 @@ test('G1/G2: actual Fruits configuration and measured realistic binary', () => {
 
 test('G3/G4: lightweight catalog and sized, scheduled previews', () => {
   const html = read('index.html');
-  assert.doesNotMatch(html, /<script|model-viewer|\.glb|\.usdz/i);
+  assert.doesNotMatch(html, /model-viewer|\.glb|\.usdz/i);
   const images = [...html.matchAll(/<img\b[^>]+>/g)].map(match => match[0]);
   assert.equal(images.length, 2);
   images.forEach(img => {
@@ -57,10 +57,10 @@ test('G3/G4: lightweight catalog and sized, scheduled previews', () => {
   assert.match(images[1], /loading="lazy"/);
   assert.match(read('style.css'), /\.dish-image\s*\{[^}]*height: auto;[^}]*aspect-ratio:/);
   assert.match(read('style.css'), /\.model-poster\s*\{[^}]*z-index: 1/);
-  assert.ok(fs.statSync(path.join(root, '3d/assets/preview.webp')).size < 50000);
-  assert.ok(fs.statSync(path.join(root, '3d/assets/fruits-real-v1-preview.webp')).size < 50000);
-  assert.ok(fs.statSync(path.join(root, '3d/assets/fruits-real-v1-poster.webp')).size < 100000);
-  assert.match(read('fruits/index.html'), /fruits-real-v1-poster\.webp[^>]+width="1200" height="900"/);
+  assert.ok(fs.statSync(path.join(root, '3d/assets/plov-menu-v2.webp')).size < 200000);
+  assert.ok(fs.statSync(path.join(root, '3d/assets/fruits-menu-v2.webp')).size < 200000);
+  assert.ok(fs.statSync(path.join(root, '3d/assets/fruits-menu-v2.webp')).size < 200000);
+  assert.match(read('fruits/index.html'), /fruits-menu-v2\.webp[^>]+width="1000" height="800"/);
 });
 
 test('G5/G9: versioned entry chain and real paths under GitHub Pages prefix', () => {

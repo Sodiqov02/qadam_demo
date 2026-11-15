@@ -162,14 +162,14 @@ test('model without USDZ keeps Android AR and disables Quick Look', async () => 
 test('catalog stays lightweight and routes to both model pages', () => {
   assert.match(catalogHtml, /href="\.\/plov\/"/);
   assert.match(catalogHtml, /href="\.\/fruits\/"/);
-  assert.match(catalogHtml, /src="\.\/assets\/preview\.webp"/);
-  assert.match(catalogHtml, /src="\.\/assets\/fruits-real-v1-preview\.webp"/);
+  assert.match(catalogHtml, /src="\.\/assets\/plov-menu-v2\.webp"/);
+  assert.match(catalogHtml, /src="\.\/assets\/fruits-menu-v2\.webp"/);
   assert.doesNotMatch(catalogHtml, /\.glb|\.usdz|model-viewer/i);
   assert.match(plovHtml, /src="\.\/app\.js\?v=[^" ]+"/);
-  assert.match(plovHtml, /src="\.\.\/assets\/preview\.webp"/);
+  assert.match(plovHtml, /src="\.\.\/assets\/plov-menu-v2\.webp"/);
   assert.equal(new URL('../assets/osh.glb', 'https://sodiqov02.github.io/qadam_demo/3d/plov/app.js').href,
     'https://sodiqov02.github.io/qadam_demo/3d/assets/osh.glb');
-  assert.match(fruitsHtml, /src="\.\.\/assets\/fruits-real-v1-poster\.webp"/);
+  assert.match(fruitsHtml, /src="\.\.\/assets\/fruits-menu-v2\.webp"/);
   assert.match(fruitsApp, /pageUrl\('fruits-real-v1\.glb'\)/);
   assert.match(fruitsApp, /arModes: 'webxr scene-viewer'/);
   assert.doesNotMatch(fruitsApp, /usdz|quick-look/i);
@@ -180,8 +180,8 @@ test('catalog stays lightweight and routes to both model pages', () => {
 test('homepage promotes both models with project-relative localized links', () => {
   assert.match(homepageHtml, /href="\.\/3d\/plov\/"/);
   assert.match(homepageHtml, /href="\.\/3d\/fruits\/"/);
-  assert.match(homepageHtml, /src="\.\/3d\/assets\/preview\.webp"/);
-  assert.match(homepageHtml, /src="\.\/3d\/assets\/fruits-preview\.webp"/);
+  assert.match(homepageHtml, /src="\.\/3d\/assets\/plov-menu-v2\.webp"/);
+  assert.match(homepageHtml, /src="\.\/3d\/assets\/fruits-menu-v2\.webp"/);
   assert.doesNotMatch(homepageHtml, /href="\/3d\//);
   assert.match(homepageScript, /arShowcaseTitle: "Taomni stolingizda ko‘ring"/);
   assert.match(homepageScript, /arShowcaseTitle: "Посмотрите блюдо на своём столе"/);

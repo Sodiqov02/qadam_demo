@@ -5,12 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; connect-src 'self'; worker-src 'self' blob:; object-src 'none'; base-uri 'none'; form-action 'self'" />
   <meta name="referrer" content="no-referrer" />
-  <meta name="description" content="Demo Plov — посмотрите блюдо в 3D и дополненной реальности." />
-  <title>Demo Plov · Qadam 3D / AR</title>
+  <meta name="description" content="Плов — посмотрите блюдо в 3D и дополненной реальности." />
+  <title>Плов · Qadam 3D / AR</title>
   <link rel="icon" href="../../assets/favicon.png" type="image/png" />
-  <link rel="preload" as="image" href="../assets/preview.webp" fetchpriority="high" />
-  <link rel="stylesheet" href="../style.css?v=20260915-1" />
-  <script type="module" src="./app.js?v=20260915-1"></script>
+  <link rel="preload" as="image" href="../assets/plov-menu-v2.webp" fetchpriority="high" />
+  <link rel="stylesheet" href="../style.css?v=20261115-ar2" />
+  <script type="module" src="./app.js?v=20261115-ar2"></script>
+  <script src="../locale.js?v=20261115-ar2" defer></script>
 </head>
 <body>
   <div class="site-shell model-page">
@@ -21,12 +22,12 @@
     <main>
       <header class="model-heading">
         <p class="eyebrow">Qadam Demo</p>
-        <h1>Demo Plov</h1>
+        <h1>Плов</h1>
         <p>Поверните блюдо пальцем, приблизьте детали или примерьте его на своём столе.</p>
       </header>
-      <section class="viewer-card" aria-label="Интерактивная модель Demo Plov">
+      <section class="viewer-card" aria-label="Интерактивная модель Плов">
         <div id="model-stage" class="model-stage">
-          <img class="model-poster" src="../assets/preview.webp" alt="Тарелка плова" width="800" height="650" decoding="async" fetchpriority="high" />
+          <img class="model-poster" src="../assets/plov-menu-v2.webp" alt="Тарелка плова" width="1000" height="800" decoding="async" fetchpriority="high" />
         </div>
         <div class="viewer-details">
           <div>

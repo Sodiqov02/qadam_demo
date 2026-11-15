@@ -11,7 +11,7 @@ function loadViewer() {
   return library;
 }
 
-export function mountModelViewer({ stage, status, reset, retry, debugHost, title, alt, glbUrl, usdzUrl = null, arModes, cameraOrbit = '25deg 45deg auto', exposure = 0.85, shadowIntensity = 0.5, shadowSoftness = 1 }) {
+export function mountModelViewer({ stage, status, reset, retry, debugHost, title, alt, glbUrl, usdzUrl = null, arModes, cameraOrbit = '25deg 45deg auto', exposure = 0.85, shadowIntensity = 0.35, shadowSoftness = 1 }) {
   if (!stage || !status || !reset || !retry) throw new Error('Missing model viewer mount element');
   const configuredArModes = arModes || (usdzUrl ? 'webxr scene-viewer quick-look' : 'webxr scene-viewer');
   const poster = stage.querySelector('.model-poster');
@@ -169,9 +169,12 @@ export function mountModelViewer({ stage, status, reset, retry, debugHost, title
         'camera-controls': '',
         'disable-pan': '',
         'camera-orbit': cameraOrbit,
+        'camera-target': 'auto auto auto',
+        'field-of-view': '30deg',
+        'tone-mapping': 'aces',
         'min-camera-orbit': 'auto 0deg 60%',
         'max-camera-orbit': 'auto 90deg 200%',
-        'touch-action': 'none',
+        'touch-action': 'pan-y',
         'shadow-intensity': String(shadowIntensity),
         'shadow-softness': String(shadowSoftness),
         exposure: String(exposure),
@@ -243,7 +246,7 @@ export function mountModelViewer({ stage, status, reset, retry, debugHost, title
             ? 'Модель готова. Можно посмотреть её на своём столе.'
             : usdzUrl
               ? 'Модель готова. AR доступен на совместимых смартфонах.'
-              : 'Модель готова. AR доступен на совместимых Android-смартфонах; на iPhone — просмотр в 3D.';
+              : 'Модель готова. AR доступен на совместимых смартфонах.';
           if (status.textContent !== message) status.textContent = message;
         }
         if (changed) console.info('[Qadam AR] capabilities', { ...diagnostics });
