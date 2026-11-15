@@ -160,8 +160,8 @@ test('model without USDZ keeps Android AR and disables Quick Look', async () => 
 });
 
 test('catalog stays lightweight and routes to both model pages', () => {
-  assert.match(catalogHtml, /href="\.\/plov\/"/);
-  assert.match(catalogHtml, /href="\.\/fruits\/"/);
+  assert.match(catalogHtml, /href="\.\/plov\/\?v=20261115-ar2"/);
+  assert.match(catalogHtml, /href="\.\/fruits\/\?v=20261115-ar2"/);
   assert.match(catalogHtml, /src="\.\/assets\/plov-menu-v2\.webp"/);
   assert.match(catalogHtml, /src="\.\/assets\/fruits-menu-v2\.webp"/);
   assert.doesNotMatch(catalogHtml, /\.glb|\.usdz|model-viewer/i);
@@ -178,8 +178,8 @@ test('catalog stays lightweight and routes to both model pages', () => {
 });
 
 test('homepage promotes both models with project-relative localized links', () => {
-  assert.match(homepageHtml, /href="\.\/3d\/plov\/"/);
-  assert.match(homepageHtml, /href="\.\/3d\/fruits\/"/);
+  assert.match(homepageHtml, /href="\.\/3d\/plov\/\?v=20261115-ar2"/);
+  assert.match(homepageHtml, /href="\.\/3d\/fruits\/\?v=20261115-ar2"/);
   assert.match(homepageHtml, /src="\.\/3d\/assets\/plov-menu-v2\.webp"/);
   assert.match(homepageHtml, /src="\.\/3d\/assets\/fruits-menu-v2\.webp"/);
   assert.doesNotMatch(homepageHtml, /href="\/3d\//);
