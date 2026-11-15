@@ -47,8 +47,7 @@ After publishing the repository root with GitHub Pages:
 All browser paths are relative so the project keeps the `/qadam_demo/` GitHub
 Pages prefix. The catalog loads only the two preview images. Each model page
 loads its GLB and the local pinned model-viewer distribution when opened. Demo
-Plov passes its USDZ to Quick Look. Demo Fruits currently has no USDZ, so it
-enables WebXR and Scene Viewer while iPhone retains the ordinary 3D viewer.
+Plov passes its USDZ to Quick Look. Demo Fruits supplies `fruits.usdz` to Quick Look as well as WebXR and Scene Viewer.
 
 ## Demo Plov AR behavior
 
@@ -73,17 +72,22 @@ errors and no warnings. The 4096×4096 texture exceeds Scene Viewer's recommende
 2048×2048 target but is below its hard model-size limits; it remains unchanged
 to preserve quality.
 
-## Adding Quick Look for Demo Fruits later
+## 2026-11-15 texture / AR repair
 
-When a real Fruits USDZ is available, place it here:
+The model pages must permit `blob:` in `connect-src`: Three.js ImageBitmapLoader
+fetches embedded GLB images through blob URLs. Blocking those requests leaves
+textured materials white. Internal model-viewer shadow styles also require inline
+styles; script policy remains self-only. Restoring these styles also restores the
+single positioned canvas and visually hidden accessible camera announcements.
 
-```text
-3d/assets/fruits.usdz
-```
+The separate `ar-actions` container keeps the AR control outside model gestures.
+Fruits Quick Look uses `assets/fruits.usdz`: original production GLB positions,
+indices, normals and UVs (V converted for USD texture coordinates), ten bound
+UsdPreviewSurface materials and eighteen packaged PNG textures. GLBs are unchanged.
 
-Then add `usdzUrl: pageUrl('fruits.usdz')` and change `arModes` to
-`webxr scene-viewer quick-look` in `3d/fruits/app.js`. The shared viewer,
-library and CSS do not need to be duplicated.
+Validation: 21 Node tests pass. Cloud browser WebGL is unavailable; native iPhone
+Quick Look launch cannot be tested here. Offline GLB renders and USD material
+preview supplement structural validation and do not establish iPhone acceptance.
 
 ## Local verification
 

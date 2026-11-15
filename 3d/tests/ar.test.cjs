@@ -40,6 +40,7 @@ async function setup({ supported = true, xr = false, debug = true, webgl = true,
   const windowEvents = new EventTarget();
   windowEvents.isSecureContext = true;
   const stage = new Element('stage');
+  const arHost = new Element('ar-host');
   const poster = new Element('img');
   stage.append(poster);
   const status = new Element('status');
@@ -75,7 +76,7 @@ async function setup({ supported = true, xr = false, debug = true, webgl = true,
     .replace("import('./vendor/model-viewer-4.3.1.min.js')", 'Promise.resolve()');
   vm.runInContext(executable, context);
   context.mountModelViewer({
-    stage, status, reset, retry, debugHost,
+    stage, arHost, status, reset, retry, debugHost,
     title: 'Demo Plov', alt: 'Plov model',
     glbUrl: 'https://sodiqov02.github.io/qadam_demo/3d/assets/osh.glb',
     usdzUrl: usdz ? 'https://sodiqov02.github.io/qadam_demo/3d/assets/osh.usdz' : null,
@@ -84,9 +85,9 @@ async function setup({ supported = true, xr = false, debug = true, webgl = true,
   await new Promise(resolve => setImmediate(resolve));
 
   return {
-    stage, poster, status, reset, retry, debugHost, intervals,
+    stage, arHost, poster, status, reset, retry, debugHost, intervals,
     viewer: () => viewer,
-    arButton: () => viewer.children.find(element => element.slot === 'ar-button'),
+    arButton: () => arHost.children.find(element => element.className === 'primary-button model-ar-button'),
     count: () => activations,
     copied: () => copied,
     click(element) { inClick = true; element.dispatchEvent(new Event('click', { bubbles: true, cancelable: true })); inClick = false; },
@@ -160,8 +161,8 @@ test('model without USDZ keeps Android AR and disables Quick Look', async () => 
 });
 
 test('catalog stays lightweight and routes to both model pages', () => {
-  assert.match(catalogHtml, /href="\.\/plov\/\?v=20261115-ar2"/);
-  assert.match(catalogHtml, /href="\.\/fruits\/\?v=20261115-ar2"/);
+  assert.match(catalogHtml, /href="\.\/plov\/\?v=20261115-ar3"/);
+  assert.match(catalogHtml, /href="\.\/fruits\/\?v=20261115-ar3"/);
   assert.match(catalogHtml, /src="\.\/assets\/plov-menu-v2\.webp"/);
   assert.match(catalogHtml, /src="\.\/assets\/fruits-menu-v2\.webp"/);
   assert.doesNotMatch(catalogHtml, /\.glb|\.usdz|model-viewer/i);
@@ -171,15 +172,15 @@ test('catalog stays lightweight and routes to both model pages', () => {
     'https://sodiqov02.github.io/qadam_demo/3d/assets/osh.glb');
   assert.match(fruitsHtml, /src="\.\.\/assets\/fruits-menu-v2\.webp"/);
   assert.match(fruitsApp, /pageUrl\('fruits-real-v1\.glb'\)/);
-  assert.match(fruitsApp, /arModes: 'webxr scene-viewer'/);
-  assert.doesNotMatch(fruitsApp, /usdz|quick-look/i);
+  assert.match(fruitsApp, /arModes: 'webxr scene-viewer quick-look'/);
+  assert.match(fruitsApp, /usdzUrl: pageUrl\('fruits\.usdz'\)/);
   assert.equal(new URL('../assets/fruits-real-v1.glb', 'https://sodiqov02.github.io/qadam_demo/3d/fruits/app.js').href,
     'https://sodiqov02.github.io/qadam_demo/3d/assets/fruits-real-v1.glb');
 });
 
 test('homepage promotes both models with project-relative localized links', () => {
-  assert.match(homepageHtml, /href="\.\/3d\/plov\/\?v=20261115-ar2"/);
-  assert.match(homepageHtml, /href="\.\/3d\/fruits\/\?v=20261115-ar2"/);
+  assert.match(homepageHtml, /href="\.\/3d\/plov\/\?v=20261115-ar3"/);
+  assert.match(homepageHtml, /href="\.\/3d\/fruits\/\?v=20261115-ar3"/);
   assert.match(homepageHtml, /src="\.\/3d\/assets\/plov-menu-v2\.webp"/);
   assert.match(homepageHtml, /src="\.\/3d\/assets\/fruits-menu-v2\.webp"/);
   assert.doesNotMatch(homepageHtml, /href="\/3d\//);
@@ -204,4 +205,24 @@ test('poster stays visible during loading and returns after error and retry', as
   assert.equal(page.poster.hidden, false);
   page.load();
   assert.equal(page.poster.hidden, true);
+});
+
+test('AR control stays outside rotation surface and is replaced on retry', async () => {
+  const page = await setup();
+  assert.equal(descendants(page.stage).includes(page.arButton()), false);
+  assert.equal(page.arHost.children.length, 1);
+  page.viewer().dispatchEvent(new Event('error'));
+  page.click(page.retry);
+  await new Promise(resolve => setImmediate(resolve));
+  assert.equal(page.arHost.children.length, 1);
+});
+
+test('viewer CSP allows embedded texture fetches and internal shadow styles', () => {
+  for (const html of [plovHtml, fruitsHtml]) {
+    const policy = html.match(/http-equiv="Content-Security-Policy" content="([^"]+)"/)[1];
+    assert.match(policy, /connect-src 'self' blob:/);
+    assert.match(policy, /style-src 'self' 'unsafe-inline'/);
+    assert.match(policy, /script-src 'self';/);
+    assert.match(html, /id="ar-actions"/);
+  }
 });

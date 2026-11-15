@@ -83,10 +83,10 @@ test('G5/G9: versioned entry chain and real paths under GitHub Pages prefix', ()
   assert.ok(fs.existsSync(path.join(root, '3d', library)));
 });
 
-test('G6/G8: actual Plov sources and Fruits Android-only modes', () => {
+test('G6/G8: actual Plov sources and Fruits Quick Look modes', () => {
   assert.equal(config('plov').glbUrl, `${base}assets/osh.glb`);
   assert.equal(config('plov').usdzUrl, `${base}assets/osh.usdz`);
-  assert.equal(config('fruits').arModes, 'webxr scene-viewer');
-  assert.equal(config('fruits').usdzUrl, undefined);
-  assert.match(read('fruits/index.html'), /На iPhone — просмотр в 3D/);
+  assert.equal(config('fruits').arModes, 'webxr scene-viewer quick-look');
+  assert.equal(config('fruits').usdzUrl, `${base}assets/fruits.usdz`);
+  assert.doesNotMatch(read('fruits/index.html'), /На iPhone — просмотр в 3D/);
 });

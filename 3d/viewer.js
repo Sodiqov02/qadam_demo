@@ -11,12 +11,12 @@ function loadViewer() {
   return library;
 }
 
-export function mountModelViewer({ stage, status, reset, retry, debugHost, title, alt, glbUrl, usdzUrl = null, arModes, cameraOrbit = '25deg 45deg auto', exposure = 0.85, shadowIntensity = 0.35, shadowSoftness = 1 }) {
+export function mountModelViewer({ stage, arHost = stage, status, reset, retry, debugHost, title, alt, glbUrl, usdzUrl = null, arModes, cameraOrbit = '25deg 45deg auto', exposure = 0.85, shadowIntensity = 0.35, shadowSoftness = 1 }) {
   if (!stage || !status || !reset || !retry) throw new Error('Missing model viewer mount element');
   const configuredArModes = arModes || (usdzUrl ? 'webxr scene-viewer quick-look' : 'webxr scene-viewer');
   const poster = stage.querySelector('.model-poster');
 
-  let viewer, loadTimer, capabilityTimer, attempt = 0;
+  let viewer, arControl, loadTimer, capabilityTimer, attempt = 0;
   const diagnostics = {
     title,
     userAgent: navigator.userAgent,
@@ -114,6 +114,7 @@ export function mountModelViewer({ stage, status, reset, retry, debugHost, title
     clearTimeout(loadTimer);
     clearInterval(capabilityTimer);
     viewer?.remove();
+    arControl?.remove();
     if (poster) poster.hidden = false;
     diagnostics.loaded = false;
     diagnostics.canActivateAR = false;
@@ -142,6 +143,7 @@ export function mountModelViewer({ stage, status, reset, retry, debugHost, title
       console.error('[Qadam 3D] error', diagnostics.loadError, error);
       renderDebug();
       viewer?.remove();
+      if (arControl) arControl.disabled = true;
       if (poster) poster.hidden = false;
       reset.disabled = true;
       status.textContent = 'Не удалось загрузить 3D. Изображение блюда доступно; попробуйте ещё раз.';
@@ -191,6 +193,7 @@ export function mountModelViewer({ stage, status, reset, retry, debugHost, title
       Object.entries(attrs).forEach(([key, value]) => viewer.setAttribute(key, value));
 
       const ar = document.createElement('button');
+      arControl = ar;
       ar.type = 'button';
       ar.slot = 'ar-button';
       ar.className = 'primary-button model-ar-button';
@@ -224,7 +227,12 @@ export function mountModelViewer({ stage, status, reset, retry, debugHost, title
         }
         renderDebug();
       });
-      viewer.append(ar);
+      // Suppress the built-in overlay; the real control sits outside the rotation area.
+      const arSlot = document.createElement('span');
+      arSlot.slot = 'ar-button';
+      arSlot.hidden = true;
+      viewer.append(arSlot);
+      arHost.append(ar);
 
       const panTarget = document.createElement('span');
       panTarget.slot = 'pan-target';

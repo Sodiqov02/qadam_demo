@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; connect-src 'self'; worker-src 'self' blob:; object-src 'none'; base-uri 'none'; form-action 'self'" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' blob:; worker-src 'self' blob:; object-src 'none'; base-uri 'none'; form-action 'self'" />
   <meta name="referrer" content="no-referrer" />
   <meta name="description" content="Фруктовая тарелка — посмотрите композицию в 3D и дополненной реальности." />
   <title>Фруктовая тарелка · Qadam 3D / AR</title>
   <link rel="icon" href="../../assets/favicon.png" type="image/png" />
   <link rel="preload" as="image" href="../assets/fruits-menu-v2.webp" fetchpriority="high" />
-  <link rel="stylesheet" href="../style.css?v=20261115-ar2" />
-  <script type="module" src="./app.js?v=20261115-ar2"></script>
-  <script src="../locale.js?v=20261115-ar2" defer></script>
+  <link rel="stylesheet" href="../style.css?v=20261115-ar3" />
+  <script type="module" src="./app.js?v=20261115-ar3"></script>
+  <script src="../locale.js?v=20261115-ar3" defer></script>
 </head>
 <body>
   <div class="site-shell model-page">
@@ -29,10 +29,11 @@
         <div id="model-stage" class="model-stage">
           <img class="model-poster" src="../assets/fruits-menu-v2.webp" alt="Фруктовая тарелка с натуральной кожурой и керамической сервировкой" width="1000" height="800" decoding="async" fetchpriority="high" />
         </div>
+        <div id="ar-actions" class="ar-actions"></div>
         <div class="viewer-details">
           <div>
             <p id="model-status" class="model-status" role="status" aria-live="polite">Загрузка 3D-модели…</p>
-            <p class="model-note">AR доступен на совместимых Android-смартфонах. На iPhone — просмотр в 3D.</p>
+            <p class="model-note">AR доступен на совместимых смартфонах</p>
           </div>
           <div class="viewer-actions">
             <button id="reset-view" class="secondary-button" type="button" disabled>Сбросить вид</button>

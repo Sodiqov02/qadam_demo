@@ -1,9 +1,10 @@
-import { mountModelViewer } from '../viewer.js?v=20261115-ar2';
+import { mountModelViewer } from '../viewer.js?v=20261115-ar3';
 
 const pageUrl = name => new URL(`../assets/${name}`, import.meta.url).href;
 
 mountModelViewer({
   stage: document.getElementById('model-stage'),
+  arHost: document.getElementById('ar-actions'),
   status: document.getElementById('model-status'),
   reset: document.getElementById('reset-view'),
   retry: document.getElementById('retry-model'),

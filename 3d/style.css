@@ -77,3 +77,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .model-stage { height: 56vh; height: 56dvh; }
 .locale-select { border: 1px solid var(--line); border-radius: 10px; padding: 10px; background: var(--surface); color: var(--accent); font: inherit; min-height: 44px; }
 .model-stage, .model-stage model-viewer { touch-action: pan-y; }
+
+/* AR is a separate touch target, outside the model rotation surface. */
+.ar-actions { padding: 16px 18px 0; }
+.ar-actions .model-ar-button { position: static; width: 100%; }
